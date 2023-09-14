@@ -4,7 +4,15 @@ ThisBuild / scalaVersion := "3.3.1"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "sfva"
-  )
+        name := "sfva",
+        libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % Test,
+        libraryDependencies += "org.soot-oss" % "sootup.core" % "1.1.2",
+        libraryDependencies += "org.soot-oss" % "sootup.java.core" % "1.1.2",
+        libraryDependencies += "org.soot-oss" % "sootup.java.sourcecode" % "1.1.2",
+    //    libraryDependencies += "org.soot-oss" % "sootup.java.bytecode" % "1.1.2",
+        libraryDependencies += "org.soot-oss" % "sootup.jimple.parser" % "1.1.2",
+        libraryDependencies += "org.soot-oss" % "sootup.callgraph" % "1.1.2",
+        libraryDependencies += "org.soot-oss" % "sootup.analysis" % "1.1.2",
 
-libraryDependencies += "org.scalatest" %% "scalatest" % "3.2.11" % Test
+        libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.3.0",
+  )
