@@ -13,15 +13,13 @@ import java.util.Collections;
 @main
 def main(): Unit = {
 
-  // show method body
-//  val sootMethod = getMethodMainFromClass("Calculator")
-//  println(sootMethod.getBody())
+  showMethodMain("Calculator")
 
-  showMethodsFromClass("Calculator")
+//  showMethodsFromClass("Calculator")
 }
 
 
-def getMethodMainFromClass(className: String, sourcePath: String = null): SootMethod = {
+def showMethodMain(className: String, sourcePath: String = null): Unit = {
 
   val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/scala/br/unb/cic/sootup/resources")
 
@@ -44,7 +42,9 @@ def getMethodMainFromClass(className: String, sourcePath: String = null): SootMe
   val sootClass = view.getClass(classType).get()
 
   // Retrieve method
-  sootClass.getMethod(methodSignature.getSubSignature()).get()
+  val sootMethod = sootClass.getMethod(methodSignature.getSubSignature()).get()
+
+  traverse(sootMethod)
 }
 
 //SootClass[Any]
