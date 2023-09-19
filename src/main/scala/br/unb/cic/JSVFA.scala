@@ -10,33 +10,33 @@ import java.util.Collections;
 def main(): Unit = {
 
   // show method body
-  val sootMethod = getSpecificMethod("HelloWorld", "main");
+  val sootMethod = getMethodMainFromClass("HelloWorld")
   println(sootMethod.getBody())
 }
 
-def getSpecificMethod(className: String, methodName: String, sourcePath: String = null): SootMethod = {
+def getMethodMainFromClass(className: String, sourcePath: String = null): SootMethod = {
 
-  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/scala/br/unb/cic/sootup/resources");
+  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/scala/br/unb/cic/sootup/resources")
 
   // Specify the language of the JavaProject.
-  val language = new JavaLanguage(8);
+  val language = new JavaLanguage(8)
 
   // Create a new JavaProject based on the input location
-  val project = JavaProject.builder(language).addInputLocation(inputLocation).build();
+  val project = JavaProject.builder(language).addInputLocation(inputLocation).build()
 
   // Create a signature for the class we want to analyze
-  val classType = project.getIdentifierFactory().getClassType(s"br.unb.cic.sootup.resources.$className");
+  val classType = project.getIdentifierFactory().getClassType(s"br.unb.cic.sootup.resources.$className")
 
   // Create a signature for the method we want to analyze// Create a signature for the method we want to analyze
-  val methodSignature = project.getIdentifierFactory.getMethodSignature(classType, methodName, "void", Collections.singletonList("java.lang.String[]"))
+  val methodSignature = project.getIdentifierFactory.getMethodSignature(classType, "main", "void", Collections.singletonList("java.lang.String[]"))
 
   // Create a view for project, which allows us to retrieve classes
-  val view = project.createView();
+  val view = project.createView()
 
   // Retrieve class
-  val sootClass = view.getClass(classType).get();
+  val sootClass = view.getClass(classType).get()
 
   // Retrieve method
-  sootClass.getMethod(methodSignature.getSubSignature()).get();
+  sootClass.getMethod(methodSignature.getSubSignature()).get()
 }
 
