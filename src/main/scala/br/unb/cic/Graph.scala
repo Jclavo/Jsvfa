@@ -45,5 +45,7 @@ class GraphSFVA {
     println(s"$to -> $from")
   })
 
+  def edgesTotal(): Int = graph.size
+
 }
 
