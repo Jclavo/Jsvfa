@@ -11,13 +11,13 @@ class GraphSFVA {
   def exportToDot(): String = {
     val edges = graph.map { edge =>
       Doc.text("\"") +
-      Doc.text(edge.getNodeFrom().getStmt().toString) +
+      Doc.text(edge.getNodeFrom().show()) +
       Doc.text("\"") +
       Doc.space +
       Doc.text("->") +
       Doc.space +
       Doc.text("\"") +
-      Doc.text(edge.getNodeTo().getStmt().toString) +
+      Doc.text(edge.getNodeTo().show()) +
       Doc.text("\"")
     }
 
