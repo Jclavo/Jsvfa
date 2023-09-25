@@ -9,7 +9,7 @@ This projects is an **Static Value Flow** Analyzer for programs in Java. Its dev
 In this study the next implementations must be done: 
 
 - [X] Rules
-    - [ ] Copy
+    - [X] Copy
     - [ ] Load
     - [ ] Store
     - [ ] Call
