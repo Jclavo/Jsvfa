@@ -78,7 +78,7 @@ def showMethodsFromClass(className: String, sourcePath: String = null): Any = {
 
 def traverse(method: SootMethod): Unit = {
     method.getBody.getStmts().forEach(stmt => {
-      println(StmtSVFA(stmt).getType())
+//      println(StmtSVFA(stmt).getType())
 //      println(stmt.getClass.getSimpleName)
 //      println(stmt)
     })
