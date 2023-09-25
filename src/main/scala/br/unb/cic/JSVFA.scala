@@ -11,13 +11,10 @@ import sootup.core.jimple.common.stmt.Stmt
 import sootup.core.jimple.common.stmt.JAssignStmt
 import sootup.core.jimple.basic.Local
 
-import java.nio.file.Paths
 import java.util.Collections
 
 import br.unb.cic.StmtSVFA.*
 import br.unb.cic.EdgeSVFA.*
-
-
 
 class JSVFA {
 
@@ -25,10 +22,6 @@ class JSVFA {
   var graphSFVA = new GraphSFVA()
 
   def run(className: String, pathTestFile: String, pathPackage: String): Unit = {
-
-    /**
-     * OBS: CREATE METHOD "getMainClass"
-     */
 
     val inputLocation = new JavaSourcePathAnalysisInputLocation(pathTestFile)
 
@@ -48,14 +41,12 @@ class JSVFA {
     val sootClass = view.getClass(classType).get()
 
     sootClass.getMethods().forEach(method => {
-//      println(s"analysing method: ${method.getName}")
 //      println(method.getBody())
       traverse(method)
     })
   }
 
   def traverse(method: SootMethod): Unit = {
-
     val body = method.getBody
     g = body.getStmtGraph()
 
