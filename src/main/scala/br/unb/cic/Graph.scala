@@ -1,12 +1,34 @@
 package br.unb.cic
 
+import org.typelevel.paiges.Doc
+
 class GraphSFVA {
 
   private var graph: Set[EdgeSVFA] = Set()
 
   def add(edge: EdgeSVFA): Unit = graph += edge
 
-  def convertToDot(): String = "in progress"
+  def exportToDot(): String = {
+    val edges = graph.map { edge =>
+      Doc.text("\"") +
+      Doc.text(edge.getNodeFrom().getStmt().toString) +
+      Doc.text("\"") +
+      Doc.space +
+      Doc.text("->") +
+      Doc.space +
+      Doc.text("\"") +
+      Doc.text(edge.getNodeTo().getStmt().toString) +
+      Doc.text("\"")
+    }
+
+    var body = Doc.intercalate(Doc.text("\n"), edges)
+
+    // add prefix and sufix
+    val prefix = Doc.text("digraph CFG { ")
+    val suffix = Doc.text("}")
+    val res = body.tightBracketBy(prefix, suffix)
+    res.render(20)
+  }
 
   def show(): Unit = graph.foreach(edge => {
     val to = edge.getNodeTo().getStmt()
