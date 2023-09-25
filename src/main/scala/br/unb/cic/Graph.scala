@@ -4,17 +4,16 @@ import sootup.core.jimple.common.stmt.Stmt
 import sootup.core.model.Method
 import sootup.core.jimple.common.stmt.JAssignStmt
 
-enum StmtType:
-  case AssignmentStmt
-  case InvokeStmt
-  case InvalidStmt
+enum StmtSVFA(stmt: Stmt):
+  case AssignmentStmt(stmt: JAssignStmt[?,?]) extends StmtSVFA(stmt)
+  case InvokeStmt(stmt: Stmt) extends StmtSVFA(stmt)
+  case InvalidStmt(stmt: Stmt) extends StmtSVFA(stmt)
 
 
-case class StmtSVFA(stmt: Stmt) {
-  def getType(): StmtType = stmt.getClass.getSimpleName match
-    case "JAssignStmt" => StmtType.AssignmentStmt
-    case _ => StmtType.InvalidStmt
-}
+object StmtSVFA:
+  def convert(stmt: Stmt): StmtSVFA = stmt.getClass.getSimpleName match
+    case "JAssignStmt" => AssignmentStmt(stmt.asInstanceOf[JAssignStmt[?,?]])
+    case _ => InvalidStmt(stmt)
 
 enum NodeSVFA(method: Method, stmt: Stmt):
   def getStmt(): Stmt = stmt

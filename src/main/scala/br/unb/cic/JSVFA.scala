@@ -14,7 +14,7 @@ import sootup.core.jimple.basic.Local
 import java.nio.file.Paths
 import java.util.Collections
 
-import br.unb.cic.StmtType.*
+import br.unb.cic.StmtSVFA.*
 import br.unb.cic.EdgeSVFA.*
 
 
@@ -65,27 +65,24 @@ class JSVFA {
   }
 
   private def analyzer(stmt: Stmt, method: SootMethod): Unit = {
-
-    val stmtSVFA = StmtSVFA(stmt)
-
-    stmtSVFA.getType() match
-      case AssignmentStmt => AnalyzerAssignments(stmt.asInstanceOf[JAssignStmt[?,?]], method)
-      case _ =>
+      StmtSVFA.convert(stmt) match
+        case AssignmentStmt(s) => AnalyzerAssignments(AssignmentStmt(s), method)
+        case _ =>
   }
 
-  private def AnalyzerAssignments(stmt: JAssignStmt[?,?], method: SootMethod): Unit = {
-    val leftOp = stmt.getLeftOp
-    val rightOp = stmt.getRightOp
+  private def AnalyzerAssignments(assignmentStmt: AssignmentStmt, method: SootMethod): Unit = {
+    val leftOp = assignmentStmt.stmt.getLeftOp
+    val rightOp = assignmentStmt.stmt.getRightOp
 
     (leftOp, rightOp) match
-      case (p: Local, q: Local) => ruleCopy(p, q, stmt, method)
+      case (p: Local, q: Local) => ruleCopy(p, q, assignmentStmt, method)
       case (_, _) =>
   }
 
-  private def ruleCopy(p: Local, q: Local, stmt: JAssignStmt[?,?], method: SootMethod): Unit = {
-    q.getDefsForLocalUse(g, stmt).forEach(d => {
+  private def ruleCopy(p: Local, q: Local, assignmentStmt: AssignmentStmt, method: SootMethod): Unit = {
+    q.getDefsForLocalUse(g, assignmentStmt.stmt).forEach(d => {
         val to = NodeSVFA.SimpleNode(method, d)
-        val from = NodeSVFA.SimpleNode(method, stmt.asInstanceOf[Stmt])
+        val from = NodeSVFA.SimpleNode(method, assignmentStmt.stmt)
         graphSFVA.add(SimpleEdge(to, from))
     })
   }
