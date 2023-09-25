@@ -17,7 +17,7 @@ import br.unb.cic.StmtSVFA.*
 import br.unb.cic.EdgeSVFA.*
 
 class JSVFA {
-  
+
   var graphSFVA = new GraphSFVA()
 
   def run(className: String, pathTestFile: String, pathPackage: String): Unit = {
@@ -71,9 +71,9 @@ class JSVFA {
 
   private def ruleCopy(p: Local, q: Local, assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     q.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
-        val to = NodeSVFA.SimpleNode(method, d)
-        val from = NodeSVFA.SimpleNode(method, assignmentStmt.stmt)
-        graphSFVA.add(SimpleEdge(to, from))
+        val from = NodeSVFA.SimpleNode(method, d)
+        val to = NodeSVFA.SimpleNode(method, assignmentStmt.stmt)
+        graphSFVA.add(SimpleEdge(from, to))
     })
   }
 }
