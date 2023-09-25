@@ -1,20 +1,19 @@
 package br.unb.cic
 
+import br.unb.cic.syntax.StmtSVFA.*
+import br.unb.cic.syntax.EdgeSVFA.*
+import br.unb.cic.syntax.{NodeSVFA, StmtSVFA}
+import br.unb.cic.{GraphSFVA}
 import sootup.callgraph.ClassHierarchyAnalysisAlgorithm
 import sootup.core.graph.StmtGraph
+import sootup.core.jimple.basic.Local
+import sootup.core.jimple.common.stmt.{JAssignStmt, Stmt}
+import sootup.core.model.{SootClass, SootMethod}
 import sootup.java.core.JavaProject
 import sootup.java.core.language.JavaLanguage
 import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
-import sootup.core.model.SootMethod
-import sootup.core.model.SootClass
-import sootup.core.jimple.common.stmt.Stmt
-import sootup.core.jimple.common.stmt.JAssignStmt
-import sootup.core.jimple.basic.Local
 
 import java.util.Collections
-
-import br.unb.cic.StmtSVFA.*
-import br.unb.cic.EdgeSVFA.*
 
 class JSVFA {
 

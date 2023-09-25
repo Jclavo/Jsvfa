@@ -1,4 +1,6 @@
-package br.unb.cic
+package br.unb.cic.syntax
+
+import br.unb.cic.syntax.NodeSVFA
 
 enum EdgeSVFA(to: NodeSVFA, from: NodeSVFA):
   def getNodeFrom(): NodeSVFA = from

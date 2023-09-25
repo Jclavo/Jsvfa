@@ -1,5 +1,6 @@
 package br.unb.cic
 
+import br.unb.cic.syntax.EdgeSVFA
 import org.typelevel.paiges.Doc
 
 class GraphSFVA {

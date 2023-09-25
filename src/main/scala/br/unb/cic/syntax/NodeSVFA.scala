@@ -1,7 +1,7 @@
-package br.unb.cic
+package br.unb.cic.syntax
 
 import sootup.core.jimple.common.stmt.Stmt
-import sootup.core.model.{SootMethod}
+import sootup.core.model.SootMethod
 
 enum NodeSVFA(method: SootMethod, stmt: Stmt):
   def getStmt(): Stmt = stmt
