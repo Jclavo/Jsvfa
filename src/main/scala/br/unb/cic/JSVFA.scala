@@ -64,7 +64,8 @@ class JSVFA {
     val rightOp = assignmentStmt.stmt.getRightOp
 
     (leftOp, rightOp) match
-      case (l: Local, r: Local) => ruleCopy(r, assignmentStmt, method, stmtGraph)
+      case (_: Local, r: Local) => ruleCopy(r, assignmentStmt, method, stmtGraph) // a = b
+      case (_: Local, _) => ruleCopyExpression(assignmentStmt, method, stmtGraph) // a = b + c
       case (_, _) =>
   }
 
@@ -82,6 +83,24 @@ class JSVFA {
         graphSFVA.add(SimpleEdge(from, to))
     })
   }
+
+  /**
+   * This is a copy operation for an expression that contents variables and pointers.
+   *
+   * Case               |     Rule
+   *  - s: a = b + c    | - {b@s' -> a@s, c@s' -> a@s}
+   *  - s: p = q        | - q@s'-> p@s
+   */
+  private def ruleCopyExpression(assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+    assignmentStmt.stmt.getUses.forEach(u => {
+      if (u.isInstanceOf[Local]) {
+        val uLocal = u.asInstanceOf[Local]
+        ruleCopy(uLocal, assignmentStmt, method, stmtGraph)
+      }
+    })
+  }
+
+
 }
 
 
