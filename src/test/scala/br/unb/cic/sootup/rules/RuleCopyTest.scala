@@ -5,9 +5,18 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class RuleCopyTest extends AnyFunSuite:
 
-  test("simple_assignment") {
+  test("variable_simple_assignment") {
     val jsvfa = JSVFA()
-    jsvfa.run("SimpleAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
-    println(jsvfa.graphSFVA.exportToDot())
-    assert(jsvfa.graphSFVA.edgesTotal() === 2)
+    jsvfa.run("SimpleVariableAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
+//    println(jsvfa.graphSFVA.exportToDot())
+    assert(jsvfa.graphSFVA.edgesTotal() === 3)
   }
+
+//  test("variable_complex_assignment") {
+//    val jsvfa = JSVFA()
+//    jsvfa.run("ComplexVariableAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
+//    //    println(jsvfa.graphSFVA.exportToDot())
+//    assert(jsvfa.graphSFVA.edgesTotal() === 2)
+//  }
+
+

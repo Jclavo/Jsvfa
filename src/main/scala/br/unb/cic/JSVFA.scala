@@ -64,12 +64,19 @@ class JSVFA {
     val rightOp = assignmentStmt.stmt.getRightOp
 
     (leftOp, rightOp) match
-      case (p: Local, q: Local) => ruleCopy(p, q, assignmentStmt, method, stmtGraph)
+      case (l: Local, r: Local) => ruleCopy(r, assignmentStmt, method, stmtGraph)
       case (_, _) =>
   }
 
-  private def ruleCopy(p: Local, q: Local, assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
-    q.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
+  /**
+   * This is a copy operation for variables and pointers.
+   *
+   * Case           |     Rule
+   *  - s: a = b    | - b@s' -> a@s
+   *  - s: p = q    | - q@s'-> p@s
+   */
+  private def ruleCopy(rightLocal: Local, assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+    rightLocal.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
         val from = NodeSVFA.SimpleNode(method, d)
         val to = NodeSVFA.SimpleNode(method, assignmentStmt.stmt)
         graphSFVA.add(SimpleEdge(from, to))
