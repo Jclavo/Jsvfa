@@ -1,4 +1,4 @@
-package br.unb.cic.sootup.resources;
+package br.unb.cic.sootup.resources.basic;
 
 public class Calculator {
 
