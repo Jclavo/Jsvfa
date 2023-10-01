@@ -24,10 +24,17 @@ class RuleCopyTest extends AnyFunSuite:
     assert(jsvfa.graphSFVA.edgesTotal() === 9)
   }
 
-  test("number_sign") {
+  test("calculator_simple") {
     val jsvfa = JSVFA()
     jsvfa.run("CalculatorSimple", "src/test/scala/br/unb/cic/sootup/resources/basic", "br.unb.cic.sootup.resources.basic")
     assert(jsvfa.graphSFVA.edgesTotal() === 8)
   }
+
+//  test("NumberSign") {
+//    val jsvfa = JSVFA()
+//    jsvfa.run("NumberSign", "src/test/scala/br/unb/cic/sootup/resources/basic", "br.unb.cic.sootup.resources.basic")
+//    println(jsvfa.graphSFVA.exportToDot())
+//    assert(jsvfa.graphSFVA.edgesTotal() === 3)
+//  }
 
 
