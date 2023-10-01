@@ -15,15 +15,19 @@ class RuleCopyTest extends AnyFunSuite:
    test("variable_complex_assignment") {
      val jsvfa = JSVFA()
      jsvfa.run("ComplexVariableAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
-     //    println(jsvfa.graphSFVA.exportToDot())
      assert(jsvfa.graphSFVA.edgesTotal() === 3)
    }
 
   test("variable_full_assignment") {
     val jsvfa = JSVFA()
     jsvfa.run("FullVariableAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
-    println(jsvfa.graphSFVA.exportToDot())
     assert(jsvfa.graphSFVA.edgesTotal() === 9)
+  }
+
+  test("number_sign") {
+    val jsvfa = JSVFA()
+    jsvfa.run("CalculatorSimple", "src/test/scala/br/unb/cic/sootup/resources/basic", "br.unb.cic.sootup.resources.basic")
+    assert(jsvfa.graphSFVA.edgesTotal() === 8)
   }
 
 
