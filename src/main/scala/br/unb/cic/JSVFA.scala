@@ -8,8 +8,8 @@ import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
 import sootup.callgraph.ClassHierarchyAnalysisAlgorithm
 import sootup.core.graph.StmtGraph
 import sootup.core.jimple.basic.Local
-import sootup.core.jimple.common.expr.{AbstractInvokeExpr, Expr}
-import sootup.core.jimple.common.stmt.{JAssignStmt, JIdentityStmt, Stmt}
+import sootup.core.jimple.common.expr.{AbstractInstanceInvokeExpr, AbstractInvokeExpr, Expr}
+import sootup.core.jimple.common.stmt.{JAssignStmt, JIdentityStmt, JInvokeStmt, Stmt}
 import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
@@ -132,12 +132,16 @@ class JSVFA {
 
     callerStmt.getInvokeExpr.getArgs.forEach(p => {
       val parameterLocal = p.asInstanceOf[Local] // not sure if it will be a local when "objects" are use
-      val parameterDeclarationStmt = getIdentityStatement(calleeMethod.getBody, parameterLocal).get
+      val parameterDeclarationStmt = getIdentityStatement(calleeMethod.getBody, parameterLocal)
+
+      if (! parameterDeclarationStmt.isDefined) {
+        return
+      }
 
       parameterLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
 
         val from = NodeSVFA.SimpleNode(callerMethod, d)
-        val to = NodeSVFA.SimpleNode(calleeMethod, parameterDeclarationStmt)
+        val to = NodeSVFA.SimpleNode(calleeMethod, parameterDeclarationStmt.get)
         graphSFVA.add(SimpleEdge(from, to))
       })
     })
@@ -154,7 +158,7 @@ class JSVFA {
    */
   private def defsToThis(invokeStmt: InvokeStmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
     val callerStmt = invokeStmt.stmt
-    val invokeLocal = callerStmt.getInvokeExpr.getUses.get(0).asInstanceOf[Local] // not sure if it will be a local when "objects" are use
+    val invokeLocal = callerStmt.getInvokeExpr.asInstanceOf[AbstractInstanceInvokeExpr].getBase // not sure if it will be a local when "objects" are use
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
     invokeLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
