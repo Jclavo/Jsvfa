@@ -48,7 +48,7 @@ class JSVFA {
     val sootClass = view.getClass(classType).get()
 
     sootClass.getMethods().forEach(method => {
-//      println(method.getBody())
+
       traverse(method)
     })
   }
@@ -63,6 +63,8 @@ class JSVFA {
     }
 
     methodsVisited += methodName
+
+//    println(methodName + "\n" + method.getBody())
 
     body.getStmts().forEach(stmt => {
       analyzer(stmt, method, stmtGraph)
