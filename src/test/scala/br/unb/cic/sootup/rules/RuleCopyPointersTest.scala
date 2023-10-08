@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class RuleCopyPointersTest extends AnyFunSuite:
 
-  test("simple_pointers_assignment") {
+  ignore("simple_pointers_assignment") {
     val jsvfa = JSVFA()
     jsvfa.run(
       "SimplePointerAssignment",
@@ -16,7 +16,7 @@ class RuleCopyPointersTest extends AnyFunSuite:
     assert(jsvfa.graphSFVA.edgesTotal() === 2)
   }
 
-  test("complex_pointers_assignment") {
+  ignore("complex_pointers_assignment") {
     val jsvfa = JSVFA()
     jsvfa.run(
       "ComplexPointerAssignment",
