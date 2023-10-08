@@ -27,7 +27,17 @@ class RuleCallTest extends AnyFunSuite:
       "br.unb.cic.sootup.resources.JSVFA.rules.call"
     )
 
-//        println(jsvfa.graphSFVA.exportToDot())
     assert(jsvfa.graphSFVA.edgesTotal() === 11)
   }
 
+  test("simple_call_with_parameter") {
+
+    val jsvfa = JSVFA()
+    jsvfa.run(
+      "simpleCallWithParameters",
+      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call",
+      "br.unb.cic.sootup.resources.JSVFA.rules.call"
+    )
+
+    assert(jsvfa.graphSFVA.edgesTotal() === 6)
+  }

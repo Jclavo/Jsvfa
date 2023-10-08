@@ -9,7 +9,7 @@ import sootup.callgraph.ClassHierarchyAnalysisAlgorithm
 import sootup.core.graph.StmtGraph
 import sootup.core.jimple.basic.Local
 import sootup.core.jimple.common.expr.{AbstractInvokeExpr, Expr}
-import sootup.core.jimple.common.stmt.{JAssignStmt, Stmt}
+import sootup.core.jimple.common.stmt.{JAssignStmt, JIdentityStmt, Stmt}
 import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
@@ -24,9 +24,9 @@ class JSVFA {
 
   var graphSFVA = new GraphSFVA()
 
-  var view: JavaView = null
+  private var view: JavaView = null
 
-  var methodsVisited: Set[String] = Set()
+  private var methodsVisited: Set[String] = Set()
 
   def run(className: String, pathTestFile: String, pathPackage: String): Unit = {
 
@@ -48,7 +48,6 @@ class JSVFA {
     val sootClass = view.getClass(classType).get()
 
     sootClass.getMethods().forEach(method => {
-
       traverse(method)
     })
   }
@@ -112,8 +111,36 @@ class JSVFA {
     defsToThis(invokeStmt, method, calleeMethod)
 
     // 2. create edge to "parameters"
+    defsToParameters(invokeStmt, method, calleeMethod)
 
     traverse(calleeMethod)
+  }
+
+  /**
+   * This create an edge for each parameter:
+   *  - from caller object definition
+   *  - to callee object definition
+   *
+   * Case                       |     Rule
+   *  - this.myFunction(a, b)   | - caller:a@s' -> callee:a@s
+   *                            | - caller:b@s' -> callee:b@s
+   */
+  private def defsToParameters(invokeStmt: InvokeStmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
+    val callerStmt = invokeStmt.stmt
+    val callerStmtGraph = callerMethod.getBody.getStmtGraph
+
+
+    callerStmt.getInvokeExpr.getArgs.forEach(p => {
+      val parameterLocal = p.asInstanceOf[Local] // not sure if it will be a local when "objects" are use
+      val parameterDeclarationStmt = getIdentityStatement(calleeMethod.getBody, parameterLocal).get
+
+      parameterLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
+
+        val from = NodeSVFA.SimpleNode(callerMethod, d)
+        val to = NodeSVFA.SimpleNode(calleeMethod, parameterDeclarationStmt)
+        graphSFVA.add(SimpleEdge(from, to))
+      })
+    })
   }
 
   /**
@@ -122,12 +149,12 @@ class JSVFA {
    *  - to callee "this" declaration
    *
    *  Case                        |     Rule
-   *  - this.myFunction(...)      | - this@s' -> caller:this@s
-   *  - myObject.myFunction(...)  | - myObject@s' -> callee:this@s
+   *  - this.myFunction(...)      | - caller:this@s' -> callee:this@s
+   *  - p.myFunction(...)         | - caller:myObject@s' -> callee:this@s // not sure about it
    */
   private def defsToThis(invokeStmt: InvokeStmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
     val callerStmt = invokeStmt.stmt
-    val invokeLocal = callerStmt.getInvokeExpr.getUses.get(0).asInstanceOf[Local];
+    val invokeLocal = callerStmt.getInvokeExpr.getUses.get(0).asInstanceOf[Local] // not sure if it will be a local when "objects" are use
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
     invokeLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
@@ -168,7 +195,38 @@ class JSVFA {
     })
   }
 
+  /**
+   * Helper functions
+   */
 
+  /**
+   * return an specific identity statement
+   * if it is found in a method body.
+   *
+   * Case
+   * - $r1 := @parameter0: java.lang.String[];
+   */
+  private def getIdentityStatement(body: Body, leftLocal: Local): Option[Stmt] = {
+    getIdentityStatements(body)
+      .find(_.asInstanceOf[JIdentityStmt[?]].getLeftOp == leftLocal)
+      .orElse(None)
+  }
+
+  /**
+   *  return a Set of identity statements from a method body
+   *
+   * Case
+   * - $r1 := @parameter0: java.lang.String[];
+   */
+  private def getIdentityStatements(body: Body): Set[Stmt] = {
+    var identityStmt: Set[Stmt] = Set()
+    body.getStmts.forEach(s => {
+      s.getClass.getSimpleName match
+        case "JIdentityStmt" => identityStmt += s
+        case _ =>
+    })
+    identityStmt
+  }
 }
 
 
