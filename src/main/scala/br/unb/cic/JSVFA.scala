@@ -1,23 +1,30 @@
 package br.unb.cic
 
-import br.unb.cic.syntax.StmtSVFA.*
-import br.unb.cic.syntax.EdgeSVFA.*
-import br.unb.cic.syntax.{NodeSVFA, StmtSVFA}
-import br.unb.cic.{GraphSFVA}
+
+import sootup.java.core.JavaProject
+import sootup.java.core.language.JavaLanguage
+import sootup.java.core.views.JavaView
+import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
 import sootup.callgraph.ClassHierarchyAnalysisAlgorithm
 import sootup.core.graph.StmtGraph
 import sootup.core.jimple.basic.Local
+import sootup.core.jimple.common.expr.{AbstractInvokeExpr, Expr}
 import sootup.core.jimple.common.stmt.{JAssignStmt, Stmt}
 import sootup.core.model.{SootClass, SootMethod}
-import sootup.java.core.JavaProject
-import sootup.java.core.language.JavaLanguage
-import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
+import sootup.core.signatures.MethodSignature
+import sootup.core.model.Body
+import br.unb.cic.syntax.StmtSVFA.*
+import br.unb.cic.syntax.EdgeSVFA.*
+import br.unb.cic.syntax.{NodeSVFA, StmtSVFA}
+import br.unb.cic.GraphSFVA
 
 import java.util.Collections
 
 class JSVFA {
 
   var graphSFVA = new GraphSFVA()
+
+  var view: JavaView = null
 
   def run(className: String, pathTestFile: String, pathPackage: String): Unit = {
 
@@ -33,7 +40,7 @@ class JSVFA {
     val classType = project.getIdentifierFactory().getClassType(s"$pathPackage.$className")
 
     // Create a view for project, which allows us to retrieve classes
-    val view = project.createView()
+    view = project.createView()
 
     // Retrieve class
     val sootClass = view.getClass(classType).get()
@@ -54,8 +61,11 @@ class JSVFA {
   }
 
   private def analyzer(stmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
-      StmtSVFA.convert(stmt) match
-        case AssignmentStmt(s) => AnalyzerAssignments(AssignmentStmt(s), method, stmtGraph)
+      val stmtSVFA = StmtSVFA.convert(stmt)
+
+      stmtSVFA match
+        case AssignmentStmt(s) => AnalyzerAssignments(AssignmentStmt(s), method, stmtGraph) // a = *
+        case InvokeStmt(s) => AnalyzerInvokes(InvokeStmt(s), method, stmtGraph) // *.myFunction(...)
         case _ =>
   }
 
@@ -67,6 +77,51 @@ class JSVFA {
       case (_: Local, r: Local) => ruleCopy(r, assignmentStmt, method, stmtGraph) // a = b
       case (_: Local, _) => ruleCopyExpression(assignmentStmt, method, stmtGraph) // a = b + c
       case (_, _) =>
+  }
+
+  private def AnalyzerInvokes(invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+    AnalyzerInvokes(invokeStmt.stmt.getInvokeExpr, invokeStmt, method, stmtGraph)
+  }
+
+  private def AnalyzerInvokes(invokeExp: AbstractInvokeExpr, invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+    //    println(invokeStmt.stmt.getInvokeExpr.getMethodSignature.getDeclClassType)
+
+    if (! view.getMethod(invokeExp.getMethodSignature).isPresent) {
+      return
+    }
+
+    val calleeMethod = view.getMethod(invokeExp.getMethodSignature).get()
+    val calleeBody = calleeMethod.getBody
+
+    /**
+     * creating nodes from caller to callee
+     */
+
+    // 1. create edge to "This"
+    defsToThis(invokeStmt, method, calleeMethod)
+
+    // 2. create edge to "parameters"
+  }
+
+  /**
+   * This create an edge:
+   *  - from caller object definition
+   *  - to callee "this" declaration
+   *
+   *  Case                        |     Rule
+   *  - this.myFunction(...)      | - this@s' -> caller:this@s
+   *  - myObject.myFunction(...)  | - myObject@s' -> callee:this@s
+   */
+  private def defsToThis(invokeStmt: InvokeStmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
+    val callerStmt = invokeStmt.stmt
+    val invokeLocal = callerStmt.getInvokeExpr.getUses.get(0).asInstanceOf[Local];
+    val callerStmtGraph = callerMethod.getBody.getStmtGraph
+
+    invokeLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
+      val from = NodeSVFA.SimpleNode(callerMethod, d)
+      val to = NodeSVFA.SimpleNode(calleeMethod, calleeMethod.getBody.getThisStmt)
+      graphSFVA.add(SimpleEdge(from, to))
+    })
   }
 
   /**
