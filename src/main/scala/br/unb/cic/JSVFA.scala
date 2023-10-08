@@ -26,6 +26,8 @@ class JSVFA {
 
   var view: JavaView = null
 
+  var methodsVisited: Set[String] = Set()
+
   def run(className: String, pathTestFile: String, pathPackage: String): Unit = {
 
     val inputLocation = new JavaSourcePathAnalysisInputLocation(pathTestFile)
@@ -54,6 +56,13 @@ class JSVFA {
   def traverse(method: SootMethod): Unit = {
     val body = method.getBody
     val stmtGraph = body.getStmtGraph()
+    val methodName = method.getName
+
+    if (methodsVisited.contains(methodName)) {
+      return
+    }
+
+    methodsVisited += methodName
 
     body.getStmts().forEach(stmt => {
       analyzer(stmt, method, stmtGraph)
@@ -101,6 +110,8 @@ class JSVFA {
     defsToThis(invokeStmt, method, calleeMethod)
 
     // 2. create edge to "parameters"
+
+    traverse(calleeMethod)
   }
 
   /**
