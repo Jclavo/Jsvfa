@@ -129,17 +129,15 @@ class JSVFA {
     val callerStmt = invokeStmt.stmt
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
-
-    callerStmt.getInvokeExpr.getArgs.forEach(p => {
-      val parameterLocal = p.asInstanceOf[Local] // not sure if it will be a local when "objects" are use
-      val parameterDeclarationStmt = getIdentityStatement(calleeMethod.getBody, parameterLocal)
+    (0 until (callerStmt.getInvokeExpr.getArgCount)).foreach(index => {
+      val parameterLocal = callerStmt.getInvokeExpr.getArg(index).asInstanceOf[Local]
+      val parameterDeclarationStmt = getIdentityStatement(calleeMethod.getBody, calleeMethod.getBody.getParameterLocal(index))
 
       if (! parameterDeclarationStmt.isDefined) {
         return
       }
 
       parameterLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
-
         val from = NodeSVFA.SimpleNode(callerMethod, d)
         val to = NodeSVFA.SimpleNode(calleeMethod, parameterDeclarationStmt.get)
         graphSFVA.add(SimpleEdge(from, to))
