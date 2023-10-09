@@ -12,7 +12,7 @@ In this study the next implementations must be done:
     - [X] Copy
     - [ ] Load
     - [ ] Store
-    - [ ] Call
+    - [X] Call
 - [X] Graph
 - [ ] Value Flow
 - [ ] Flowdroid benchmark 
