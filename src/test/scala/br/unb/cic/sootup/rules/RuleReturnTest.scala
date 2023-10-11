@@ -17,3 +17,15 @@ class RuleReturnTest extends AnyFunSuite:
 //    println(jsvfa.graphSFVA.exportToDot())
     assert(jsvfa.graphSFVA.edgesTotal() === 7)
   }
+
+  test("complex_return") {
+
+    val jsvfa = JSVFA()
+    jsvfa.run(
+      "complexReturn",
+      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call",
+      "br.unb.cic.sootup.resources.JSVFA.rules.call"
+    )
+
+    assert(jsvfa.graphSFVA.edgesTotal() === 9)
+  }
