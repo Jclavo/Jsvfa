@@ -9,7 +9,7 @@ import sootup.callgraph.ClassHierarchyAnalysisAlgorithm
 import sootup.core.graph.StmtGraph
 import sootup.core.jimple.basic.Local
 import sootup.core.jimple.common.expr.{AbstractInstanceInvokeExpr, AbstractInvokeExpr, Expr}
-import sootup.core.jimple.common.stmt.{JAssignStmt, JIdentityStmt, JInvokeStmt, Stmt}
+import sootup.core.jimple.common.stmt.{JAssignStmt, JIdentityStmt, JInvokeStmt, JReturnStmt, Stmt}
 import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
@@ -84,16 +84,17 @@ class JSVFA {
     val rightOp = assignmentStmt.stmt.getRightOp
 
     (leftOp, rightOp) match
+      case (_: Local, r: AbstractInvokeExpr) =>  AnalyzerInvokes(r, assignmentStmt.stmt, method, stmtGraph)
       case (_: Local, r: Local) => ruleCopy(r, assignmentStmt, method, stmtGraph) // a = b
       case (_: Local, _) => ruleCopyExpression(assignmentStmt, method, stmtGraph) // a = b + c
       case (_, _) =>
   }
 
   private def AnalyzerInvokes(invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
-    AnalyzerInvokes(invokeStmt.stmt.getInvokeExpr, invokeStmt, method, stmtGraph)
+    AnalyzerInvokes(invokeStmt.stmt.getInvokeExpr, invokeStmt.stmt, method, stmtGraph)
   }
 
-  private def AnalyzerInvokes(invokeExp: AbstractInvokeExpr, invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+  private def AnalyzerInvokes(invokeExp: AbstractInvokeExpr, invokeStmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     //    println(invokeStmt.stmt.getInvokeExpr.getMethodSignature.getDeclClassType)
 
     if (! view.getMethod(invokeExp.getMethodSignature).isPresent) {
@@ -113,7 +114,67 @@ class JSVFA {
     // 2. create edge to "parameters"
     defsToParameters(invokeStmt, method, calleeMethod)
 
+    // 3. create edge to "return"
+    defsToReturn(invokeStmt, method, calleeMethod)
+
     traverse(calleeMethod)
+  }
+
+  /**
+   * This method create two edges for:
+   *
+   * CASE: 1
+   * This create an edge for each return statement:
+   *  - from where the return value is defined
+   *  - to the return stmt
+   *
+   * Case               |     Rule
+   *  - x = .....       | - x@s' -> x@s
+   *    ...
+   *    return x
+   *
+   *
+   * CASE: 2
+   * This create an edge:
+   *  - from the return statement
+   *  - to where the method was called
+   *
+   * Case                     |     Rule
+   *  - a = myFunction(...)   | - callee:x@s -> caller:a@s'
+   *    ...
+   *
+   *    myFunction(...) {
+   *    ...
+   *    return x
+   *    }
+   */
+  private def defsToReturn(invokeStmt: Stmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
+
+    getReturnStatements(calleeMethod.getBody).foreach(r => {
+
+      val opLocal = r.asInstanceOf[JReturnStmt].getOp.asInstanceOf[Local]
+
+      opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
+
+        // Case: 1
+        val from = NodeSVFA.SimpleNode(calleeMethod, d)
+        val to = NodeSVFA.SimpleNode(calleeMethod, r)
+        graphSFVA.add(SimpleEdge(from, to))
+
+        /**
+         * Case: 2
+         *
+         * this edge is created just when the STMT is an Assignment
+         * but I am not sure if creating it when it is an Invoke
+         */
+        if (invokeStmt.isInstanceOf[JAssignStmt[?,?]]) {
+          val from = NodeSVFA.SimpleNode(calleeMethod, r)
+          val to = NodeSVFA.SimpleNode(callerMethod, invokeStmt)
+          graphSFVA.add(SimpleEdge(from, to))
+        }
+
+      })
+    })
   }
 
   /**
@@ -125,8 +186,8 @@ class JSVFA {
    *  - this.myFunction(a, b)   | - caller:a@s' -> callee:a@s
    *                            | - caller:b@s' -> callee:b@s
    */
-  private def defsToParameters(invokeStmt: InvokeStmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
-    val callerStmt = invokeStmt.stmt
+  private def defsToParameters(invokeStmt: Stmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
+    val callerStmt = invokeStmt
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
     (0 until (callerStmt.getInvokeExpr.getArgCount)).foreach(index => {
@@ -154,8 +215,8 @@ class JSVFA {
    *  - this.myFunction(...)      | - caller:this@s' -> callee:this@s
    *  - p.myFunction(...)         | - caller:myObject@s' -> callee:this@s // not sure about it
    */
-  private def defsToThis(invokeStmt: InvokeStmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
-    val callerStmt = invokeStmt.stmt
+  private def defsToThis(invokeStmt: Stmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
+    val callerStmt = invokeStmt
     val invokeLocal = callerStmt.getInvokeExpr.asInstanceOf[AbstractInstanceInvokeExpr].getBase // not sure if it will be a local when "objects" are use
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
@@ -228,6 +289,16 @@ class JSVFA {
         case _ =>
     })
     identityStmt
+  }
+
+  private def getReturnStatements(body: Body): Set[Stmt] = {
+    var returnStmts: Set[Stmt] = Set()
+    body.getStmts.forEach(s => {
+      s.getClass.getSimpleName match
+        case "JReturnStmt" => returnStmts += s
+        case _ =>
+    })
+    returnStmts
   }
 }
 
