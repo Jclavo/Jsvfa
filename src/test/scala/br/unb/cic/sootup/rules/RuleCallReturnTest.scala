@@ -5,7 +5,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class RuleCallReturnTest extends AnyFunSuite:
 
-  test("simple_return") {
+  test("simple_call_and_return") {
     
     val jsvfa = JSVFA()
     jsvfa.run(
@@ -18,7 +18,7 @@ class RuleCallReturnTest extends AnyFunSuite:
     assert(jsvfa.graphSFVA.edgesTotal() === 9)
   }
 
-  test("complex_return") {
+  test("complex_call_and_return") {
 
     val jsvfa = JSVFA()
     jsvfa.run(
@@ -26,6 +26,6 @@ class RuleCallReturnTest extends AnyFunSuite:
       "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call",
       "br.unb.cic.sootup.resources.JSVFA.rules.call"
     )
-    
-    assert(jsvfa.graphSFVA.edgesTotal() === 15)
+
+    assert(jsvfa.graphSFVA.edgesTotal() === 22)
   }
