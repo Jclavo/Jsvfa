@@ -152,28 +152,30 @@ class JSVFA {
 
     getReturnStatements(calleeMethod.getBody).foreach(r => {
 
-      val opLocal = r.asInstanceOf[JReturnStmt].getOp.asInstanceOf[Local]
+      val rValue = r.asInstanceOf[JReturnStmt].getOp
 
-      opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
+      // Case: 1
+      if (rValue.isInstanceOf[Local]) {
+        val opLocal = rValue.asInstanceOf[Local]
 
-        // Case: 1
-        val from = NodeSVFA.SimpleNode(calleeMethod, d)
-        val to = NodeSVFA.SimpleNode(calleeMethod, r)
-        graphSFVA.add(SimpleEdge(from, to))
-
-        /**
-         * Case: 2
-         *
-         * this edge is created just when the STMT is an Assignment
-         * but I am not sure if creating it when it is an Invoke
-         */
-        if (invokeStmt.isInstanceOf[JAssignStmt[?,?]]) {
-          val from = NodeSVFA.SimpleNode(calleeMethod, r)
-          val to = NodeSVFA.SimpleNode(callerMethod, invokeStmt)
+        opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
+          val from = NodeSVFA.SimpleNode(calleeMethod, d)
+          val to = NodeSVFA.SimpleNode(calleeMethod, r)
           graphSFVA.add(SimpleEdge(from, to))
-        }
+        })
+      }
 
-      })
+      /**
+       * Case: 2
+       *
+       * this edge is created just when the STMT is an Assignment
+       * but I am not sure if creating it when it is an Invoke
+       */
+      if (invokeStmt.isInstanceOf[JAssignStmt[?, ?]]) {
+        val from = NodeSVFA.SimpleNode(calleeMethod, r)
+        val to = NodeSVFA.SimpleNode(callerMethod, invokeStmt)
+        graphSFVA.add(SimpleEdge(from, to))
+      }
     })
   }
 

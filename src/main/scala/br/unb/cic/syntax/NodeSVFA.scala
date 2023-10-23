@@ -6,7 +6,7 @@ import sootup.core.model.SootMethod
 enum NodeSVFA(method: SootMethod, stmt: Stmt):
   def getStmt(): Stmt = stmt
   
-  def show(): String = s"${method.getDeclaringClassType.toString}\n<${method.getName}>\n${stmt.toString}\nline:${stmt.getPositionInfo().getStmtPosition().getFirstLine()}"
+  def show(): String = s"${method.getDeclaringClassType.toString}\n<${method.getName}>\n${stmt.toString.replaceAll("\"", "'")}\nline:${stmt.getPositionInfo().getStmtPosition().getFirstLine()}"
 
 
   case SimpleNode(method: SootMethod, stmt: Stmt) extends NodeSVFA(method, stmt)
