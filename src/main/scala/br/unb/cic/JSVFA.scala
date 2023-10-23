@@ -304,12 +304,11 @@ class JSVFA {
   }
 
   /**
-   *
+   *  these function returns the type of stmt
+   *  (simple, source or sink)
    */
   private def getStmtType(stmt: Stmt): Int = {
-    val stmtSVFA = StmtSVFA.convert(stmt)
-
-    stmtSVFA match
+    StmtSVFA.convert(stmt) match
       case AssignmentStmt(s) => getStmtType(s)
       case InvokeStmt(s) => getStmtType(s)
       case _ => -1
@@ -320,9 +319,7 @@ class JSVFA {
   }
 
   private def getStmtType(assignmentStmt: AssignmentStmt): Int = {
-    val rightOp = assignmentStmt.stmt.getRightOp
-
-    rightOp match
+    assignmentStmt.stmt.getRightOp match
       case r: AbstractInvokeExpr => getStmtType(r.getMethodSignature.getName)
       case _ => -1
   }
