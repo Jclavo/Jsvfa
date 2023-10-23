@@ -302,6 +302,35 @@ class JSVFA {
     })
     returnStmts
   }
+
+  /**
+   *
+   */
+  private def getNodeType(stmt: Stmt): Int = {
+    val stmtSVFA = StmtSVFA.convert(stmt)
+
+    stmtSVFA match
+      case AssignmentStmt(s) => getNodeType(s)
+      case InvokeStmt(s) => getNodeType(s)
+      case _ => -1
+  }
+
+  private def getNodeType(invokeStmt: InvokeStmt): Int = {
+    getNodeType(invokeStmt.stmt.getInvokeExpr.getMethodSignature.getName)
+  }
+
+  private def getNodeType(assignmentStmt: AssignmentStmt): Int = {
+    val rightOp = assignmentStmt.stmt.getRightOp
+
+    rightOp match
+      case r: AbstractInvokeExpr => getNodeType(r.getMethodSignature.getName)
+      case _ => -1
+  }
+
+  private def getNodeType(methodName: String): Int = methodName match
+    case "source" => 1
+    case "sink" => 0
+    case _ => -1
 }
 
 
