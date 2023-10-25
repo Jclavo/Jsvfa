@@ -4,7 +4,7 @@ import sootup.core.jimple.common.stmt.Stmt;
 import sootup.core.model.Body;
 import br.unb.cic.syntax.StmtSVFA.isSourceStmt
 
-def getSourceStatement(body: Body): Set[Stmt] = {
+def getSourceStatements(body: Body): Set[Stmt] = {
     var sourceStmt: Set[Stmt] = Set()
     body.getStmts().forEach(stmt => {
         if (isSourceStmt(stmt)) {
@@ -18,8 +18,4 @@ def getSourceStatement(body: Body): Set[Stmt] = {
 //            case _ =>
     })
     sourceStmt
-}
-
-def getSourceStatementTotal(body: Body): Int = {
-    getSourceStatement(body).size
 }

@@ -1,7 +1,7 @@
 package br.unb.cic.sootup.helpers
 
 import br.unb.cic.JSVFA
-import br.unb.cic.syntax.getSourceStatementTotal
+import br.unb.cic.syntax.getSourceStatements
 import org.scalatest.funsuite.AnyFunSuite
 
 class StmtType extends AnyFunSuite:
@@ -16,5 +16,5 @@ class StmtType extends AnyFunSuite:
       "br.unb.cic.sootup.resources.JSVFA.cases.basic"
     )
 
-    assert(getSourceStatementTotal(body) === 1)
+    assert(getSourceStatements(body).size === 1)
   }
