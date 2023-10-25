@@ -17,21 +17,19 @@ object StmtSVFA:
     case _ => InvalidStmt(stmt)
 
   /**
-   * these function returns the type of stmt
+   * These functions returns the method's name
+   * if a statement is calling one
    */
   private def getMethodNameFromStmt(stmt: Stmt): String = {
-    val stmtSVFA = StmtSVFA.convert(stmt)
-
-    stmtSVFA match {
+    StmtSVFA.convert(stmt) match {
       case InvokeStmt(s) => getMethodNameFromStmt(s)
       case AssignmentStmt(s) => getMethodNameFromStmt(s)
       case _ => ""
     }
   }
 
-  private def getMethodNameFromStmt(invokeStmt: JInvokeStmt): String = {
+  private def getMethodNameFromStmt(invokeStmt: JInvokeStmt): String =
     invokeStmt.getInvokeExpr.getMethodSignature.getName
-  }
 
   private def getMethodNameFromStmt(assignmentStmt: JAssignStmt[?, ?]): String = {
     assignmentStmt.getRightOp match
@@ -40,7 +38,7 @@ object StmtSVFA:
   }
 
   def isSourceStmt(stmt: Stmt): Boolean = {
-    //more method name can be added
+    //more method name can be added here
     List("source").indexOf(getMethodNameFromStmt(stmt)) match
       case -1 => false
       case _ => true
