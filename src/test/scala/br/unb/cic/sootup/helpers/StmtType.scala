@@ -6,7 +6,7 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class StmtType extends AnyFunSuite:
 
-  test("stmt_is_simple") {
+  test("method_has_source_stmt") {
 
     val jsvfa = JSVFA()
 
