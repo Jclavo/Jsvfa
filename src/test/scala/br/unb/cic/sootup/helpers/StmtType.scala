@@ -31,3 +31,17 @@ class StmtType extends AnyFunSuite:
 
     assert(getSinkStatements(body).size === 1)
   }
+
+  test("method_has_not_source_or_sink") {
+
+    val jsvfa = JSVFA()
+
+    val body = jsvfa.getMainMethod(
+      "SimpleVariableAssignment",
+      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules",
+      "br.unb.cic.sootup.resources.JSVFA.rules"
+    )
+
+    assert(getSourceStatements(body).size === 0)
+    assert(getSinkStatements(body).size === 0)
+  }
