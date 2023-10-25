@@ -43,3 +43,10 @@ object StmtSVFA:
       case -1 => false
       case _ => true
   }
+
+  def isSinkStmt(stmt: Stmt): Boolean = {
+    //more method name can be added here
+    List("sink").indexOf(getMethodNameFromStmt(stmt)) match
+      case -1 => false
+      case _ => true
+  }
