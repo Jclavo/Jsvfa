@@ -303,31 +303,34 @@ class JSVFA {
     returnStmts
   }
 
-  /**
-   *  these function returns the type of stmt
-   *  (simple, source or sink)
-   */
-  private def getStmtType(stmt: Stmt): Int = {
-    StmtSVFA.convert(stmt) match
-      case AssignmentStmt(s) => getStmtType(s)
-      case InvokeStmt(s) => getStmtType(s)
-      case _ => -1
-  }
 
-  private def getStmtType(invokeStmt: InvokeStmt): Int = {
-    getStmtType(invokeStmt.stmt.getInvokeExpr.getMethodSignature.getName)
-  }
+  def getMainMethod(className: String, pathTestFile: String, pathPackage: String): Body = {
 
-  private def getStmtType(assignmentStmt: AssignmentStmt): Int = {
-    assignmentStmt.stmt.getRightOp match
-      case r: AbstractInvokeExpr => getStmtType(r.getMethodSignature.getName)
-      case _ => -1
-  }
+    val inputLocation = new JavaSourcePathAnalysisInputLocation(pathTestFile)
 
-  private def getStmtType(methodName: String): Int = methodName match
-    case "source" => 1
-    case "sink" => 0
-    case _ => -1
+    // Specify the language of the JavaProject.
+    val language = new JavaLanguage(8)
+
+    // Create a new JavaProject based on the input location
+    val project = JavaProject.builder(language).addInputLocation(inputLocation).build()
+
+    // Create a signature for the class we want to analyze
+    val classType = project.getIdentifierFactory().getClassType(s"$pathPackage.$className")
+
+    // Create a signature for the method we want to analyze// Create a signature for the method we want to analyze
+    val methodSignature = project.getIdentifierFactory.getMethodSignature(classType, "main", "void", Collections.singletonList("java.lang.String[]"))
+
+    // Create a view for project, which allows us to retrieve classes
+    val view = project.createView()
+
+    // Retrieve class
+    val sootClass = view.getClass(classType).get()
+
+    // Retrieve method
+    val sootMethod = sootClass.getMethod(methodSignature.getSubSignature()).get()
+
+    sootMethod.getBody
+  }
 }
 
 
