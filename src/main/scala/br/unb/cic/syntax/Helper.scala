@@ -30,3 +30,9 @@ def getSourceStatements(body: Body): Set[Stmt] = {
 def getSinkStatements(body: Body): Set[Stmt] = {
     getSourceAndSinkStatements(body)("sink")
 }
+
+def isSourceOrSinkStatement(stmt: Stmt): Boolean = {
+    isSourceStmt(stmt) match
+        case true => true
+        case _ => isSinkStmt(stmt)
+}

@@ -15,7 +15,7 @@ import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
 import br.unb.cic.syntax.StmtSVFA.*
 import br.unb.cic.syntax.EdgeSVFA.*
-import br.unb.cic.syntax.{NodeSVFA, StmtSVFA}
+import br.unb.cic.syntax.{NodeSVFA, StmtSVFA, isSourceOrSinkStatement}
 import br.unb.cic.GraphSFVA
 
 import java.util.Collections
@@ -71,6 +71,11 @@ class JSVFA {
   }
 
   private def analyzer(stmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+
+      if (isSourceOrSinkStatement(stmt)) {
+        return
+      }
+
       val stmtSVFA = StmtSVFA.convert(stmt)
 
       stmtSVFA match
