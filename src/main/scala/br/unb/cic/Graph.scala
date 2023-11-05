@@ -1,5 +1,6 @@
 package br.unb.cic
 
+import br.unb.cic.syntax.NodeSVFA.{SinkNode, SourceNode}
 import br.unb.cic.syntax.{EdgeSVFA, NodeSVFA}
 import org.typelevel.paiges.Doc
 import scalax.collection.edges.{DiEdge, DiEdgeImplicits}
@@ -12,6 +13,8 @@ class GraphSFVA {
   def addNode(node: NodeSVFA): Unit = graph.add(node)
 
   def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add((source ~> target))
+
+  def getNodes(): Set[NodeSVFA] = graph.nodes.map(n => n.outer).toSet
 
   def exportToDot(): String = {
     val edges = graph.edges.map { edge =>
@@ -26,7 +29,14 @@ class GraphSFVA {
       Doc.text("\"")
     }
 
-    var body = Doc.intercalate(Doc.text("\n"), edges)
+    val colorNodes = graph.nodes.map { node =>
+      Doc.text("\"") +
+      Doc.text(node.outer.show()) +
+      Doc.text("\"") +
+      Doc.space + Doc.text(s"[style=filled, fillcolor=${getColorForNode(node.outer)}]")
+    }
+
+    val body = Doc.intercalate(Doc.text("\n"), edges union colorNodes)
 
     // add prefix and sufix
     val prefix = Doc.text("digraph CFG { ")
@@ -34,6 +44,11 @@ class GraphSFVA {
     val res = body.tightBracketBy(prefix, suffix)
     res.render(20)
   }
+
+  def getColorForNode(node: NodeSVFA): String = node match
+    case SourceNode(_, _) => "blue"
+    case SinkNode(_, _) => "red"
+    case _ => "white"
 
   def show(): Unit = {
       graph.edges.foreach(edge => {
