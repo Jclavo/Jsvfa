@@ -72,10 +72,6 @@ class JSVFA {
 
   private def analyzer(stmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
 
-      if (isSourceOrSinkStatement(stmt)) {
-        return
-      }
-
       val stmtSVFA = StmtSVFA.convert(stmt)
 
       stmtSVFA match
@@ -108,6 +104,15 @@ class JSVFA {
 
     val calleeMethod = view.getMethod(invokeExp.getMethodSignature).get()
     val calleeBody = calleeMethod.getBody
+
+    /**
+     * if it is source or sink stmt
+     * any of them wont be explored
+     */
+      if (isSourceOrSinkStatement(invokeStmt)) {
+        defsToParameters(invokeStmt, method, calleeMethod, true)
+        return
+      }
 
     /**
      * creating nodes from caller to callee
@@ -164,9 +169,8 @@ class JSVFA {
         val opLocal = rValue.asInstanceOf[Local]
 
         opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
-          val from = NodeSVFA.SimpleNode(calleeMethod, d)
-          val to = NodeSVFA.SimpleNode(calleeMethod, r)
-//          graphSFVA.addEdge(SimpleEdge(from, to))
+          val from = NodeSVFA.createNode(calleeMethod, d)
+          val to = NodeSVFA.createNode(calleeMethod, r)
           graphSFVA.addEdge(from, to)
         })
       }
@@ -178,9 +182,8 @@ class JSVFA {
        * but I am not sure if creating it when it is an Invoke
        */
       if (invokeStmt.isInstanceOf[JAssignStmt[?, ?]]) {
-        val from = NodeSVFA.SimpleNode(calleeMethod, r)
-        val to = NodeSVFA.SimpleNode(callerMethod, invokeStmt)
-//        graphSFVA.add(SimpleEdge(from, to))
+        val from = NodeSVFA.createNode(calleeMethod, r)
+        val to = NodeSVFA.createNode(callerMethod, invokeStmt)
         graphSFVA.addEdge(from, to)
       }
     })
@@ -195,7 +198,7 @@ class JSVFA {
    *  - this.myFunction(a, b)   | - caller:a@s' -> callee:a@s
    *                            | - caller:b@s' -> callee:b@s
    */
-  private def defsToParameters(invokeStmt: Stmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
+  private def defsToParameters(invokeStmt: Stmt, callerMethod: SootMethod, calleeMethod: SootMethod, isSourceOrSinkNode: Boolean = false): Unit = {
     val callerStmt = invokeStmt
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
@@ -207,11 +210,20 @@ class JSVFA {
         return
       }
 
+      val pivotCallerNode = NodeSVFA.createNode(callerMethod, invokeStmt)
+
       parameterLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
-        val from = NodeSVFA.SimpleNode(callerMethod, d)
-        val to = NodeSVFA.SimpleNode(calleeMethod, parameterDeclarationStmt.get)
-//        graphSFVA.add(SimpleEdge(from, to))
-        graphSFVA.addEdge(from, to)
+
+        val from = NodeSVFA.createNode(callerMethod, d)
+        val to = NodeSVFA.createNode(calleeMethod, parameterDeclarationStmt.get)
+
+        /**
+         * check if it is source or sink node
+         * to select which nodes will be connected
+         */
+        isSourceOrSinkNode match
+          case true => graphSFVA.addEdge(from, pivotCallerNode)
+          case _ => graphSFVA.addEdge(from, to)
       })
     })
   }
@@ -231,9 +243,8 @@ class JSVFA {
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
     invokeLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
-      val from = NodeSVFA.SimpleNode(callerMethod, d)
-      val to = NodeSVFA.SimpleNode(calleeMethod, calleeMethod.getBody.getThisStmt)
-//      graphSFVA.add(SimpleEdge(from, to))
+      val from = NodeSVFA.createNode(callerMethod, d)
+      val to = NodeSVFA.createNode(calleeMethod, calleeMethod.getBody.getThisStmt)
       graphSFVA.addEdge(from, to)
     })
   }
@@ -247,9 +258,8 @@ class JSVFA {
    */
   private def ruleCopy(rightLocal: Local, assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     rightLocal.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
-        val from = NodeSVFA.SimpleNode(method, d)
-        val to = NodeSVFA.SimpleNode(method, assignmentStmt.stmt)
-//        graphSFVA.add(SimpleEdge(from, to))
+        val from = NodeSVFA.createNode(method, d)
+        val to = NodeSVFA.createNode(method, assignmentStmt.stmt)
       graphSFVA.addEdge(from, to)
     })
   }
