@@ -45,7 +45,7 @@ class GraphSFVA {
     res.render(20)
   }
 
-  def getColorForNode(node: NodeSVFA): String = node match
+  private def getColorForNode(node: NodeSVFA): String = node match
     case SourceNode(_, _) => "blue"
     case SinkNode(_, _) => "red"
     case _ => "white"
