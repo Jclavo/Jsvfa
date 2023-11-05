@@ -1,24 +1,28 @@
 package br.unb.cic
 
-import br.unb.cic.syntax.EdgeSVFA
+import br.unb.cic.syntax.{EdgeSVFA, NodeSVFA}
 import org.typelevel.paiges.Doc
+import scalax.collection.edges.{DiEdge, DiEdgeImplicits}
+import scalax.collection.mutable.Graph
 
 class GraphSFVA {
 
-  private var graph: Set[EdgeSVFA] = Set()
+  val graph = Graph.empty[NodeSVFA, DiEdge[NodeSVFA]]
 
-  def add(edge: EdgeSVFA): Unit = graph += edge
+  def addNode(node: NodeSVFA): Unit = graph.add(node)
+
+  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add((source ~> target))
 
   def exportToDot(): String = {
-    val edges = graph.map { edge =>
+    val edges = graph.edges.map { edge =>
       Doc.text("\"") +
-      Doc.text(edge.getNodeFrom().show()) +
+      Doc.text(edge._1.show()) +
       Doc.text("\"") +
       Doc.space +
       Doc.text("->") +
       Doc.space +
       Doc.text("\"") +
-      Doc.text(edge.getNodeTo().show()) +
+      Doc.text(edge._2.show()) +
       Doc.text("\"")
     }
 
@@ -31,11 +35,13 @@ class GraphSFVA {
     res.render(20)
   }
 
-  def show(): Unit = graph.foreach(edge => {
-    val to = edge.getNodeTo().getStmt()
-    val from = edge.getNodeFrom().getStmt()
-    println(s"$to -> $from")
-  })
+  def show(): Unit = {
+      graph.edges.foreach(edge => {
+          val to = edge._1.getStmt()
+          val from = edge._2.getStmt()
+          println(s"$to -> $from")
+      })
+  }
 
   def edgesTotal(): Int = graph.size
 }

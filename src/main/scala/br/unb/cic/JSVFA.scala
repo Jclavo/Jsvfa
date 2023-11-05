@@ -166,7 +166,8 @@ class JSVFA {
         opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
           val from = NodeSVFA.SimpleNode(calleeMethod, d)
           val to = NodeSVFA.SimpleNode(calleeMethod, r)
-          graphSFVA.add(SimpleEdge(from, to))
+//          graphSFVA.addEdge(SimpleEdge(from, to))
+          graphSFVA.addEdge(from, to)
         })
       }
 
@@ -179,7 +180,8 @@ class JSVFA {
       if (invokeStmt.isInstanceOf[JAssignStmt[?, ?]]) {
         val from = NodeSVFA.SimpleNode(calleeMethod, r)
         val to = NodeSVFA.SimpleNode(callerMethod, invokeStmt)
-        graphSFVA.add(SimpleEdge(from, to))
+//        graphSFVA.add(SimpleEdge(from, to))
+        graphSFVA.addEdge(from, to)
       }
     })
   }
@@ -208,7 +210,8 @@ class JSVFA {
       parameterLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
         val from = NodeSVFA.SimpleNode(callerMethod, d)
         val to = NodeSVFA.SimpleNode(calleeMethod, parameterDeclarationStmt.get)
-        graphSFVA.add(SimpleEdge(from, to))
+//        graphSFVA.add(SimpleEdge(from, to))
+        graphSFVA.addEdge(from, to)
       })
     })
   }
@@ -230,7 +233,8 @@ class JSVFA {
     invokeLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
       val from = NodeSVFA.SimpleNode(callerMethod, d)
       val to = NodeSVFA.SimpleNode(calleeMethod, calleeMethod.getBody.getThisStmt)
-      graphSFVA.add(SimpleEdge(from, to))
+//      graphSFVA.add(SimpleEdge(from, to))
+      graphSFVA.addEdge(from, to)
     })
   }
 
@@ -245,7 +249,8 @@ class JSVFA {
     rightLocal.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
         val from = NodeSVFA.SimpleNode(method, d)
         val to = NodeSVFA.SimpleNode(method, assignmentStmt.stmt)
-        graphSFVA.add(SimpleEdge(from, to))
+//        graphSFVA.add(SimpleEdge(from, to))
+      graphSFVA.addEdge(from, to)
     })
   }
 

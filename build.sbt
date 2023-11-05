@@ -15,5 +15,6 @@ lazy val root = (project in file("."))
         libraryDependencies += "org.soot-oss" % "sootup.analysis" % "1.1.2",
 
         libraryDependencies += "ch.qos.logback" % "logback-classic" % "1.3.0",
-        libraryDependencies += "org.typelevel" %% "paiges-core" % "0.4.2"
+        libraryDependencies += "org.typelevel" %% "paiges-core" % "0.4.2" ,
+        libraryDependencies += "org.scala-graph" % "graph-core_2.13" % "2.0.0"
   )
