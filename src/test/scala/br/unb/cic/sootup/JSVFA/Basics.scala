@@ -15,6 +15,5 @@ class Basics extends AnyFunSuite:
       "br.unb.cic.sootup.resources.JSVFA.cases.basic"
     )
 
-    println(jsvfa.graphSFVA.exportToDot())
-//    assert(jsvfa.graphSFVA.edgesTotal() === 20)
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
   }

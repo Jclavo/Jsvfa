@@ -14,7 +14,7 @@ class GraphSFVA {
 
   def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add((source ~> target))
 
-  def getNodes(): Set[NodeSVFA] = graph.nodes.map(n => n.outer).toSet
+  def getNodes: Set[NodeSVFA] = graph.nodes.map(n => n.outer).toSet
 
   def exportToDot(): String = {
     val edges = graph.edges.map { edge =>
@@ -59,5 +59,28 @@ class GraphSFVA {
   }
 
   def edgesTotal(): Int = graph.size
+
+  def isSourceNode(node: NodeSVFA): Boolean = node match
+    case SourceNode(_, _) => true
+    case _ => false
+
+  def isSinkNode(node: NodeSVFA): Boolean = node match
+    case SinkNode(_, _) => true
+    case _ => false
+
+  def getSourceNodes: Set[NodeSVFA] = graph.nodes.filter(n => isSourceNode(n)).map(n => n.outer).toSet
+
+  def getSinkNodes: Set[NodeSVFA] = graph.nodes.filter(n => isSinkNode(n)).map(n => n.outer).toSet
+
+  def getAmountOfLeaks: Int = {
+    var amountOfLeaks: Int = 0
+    getSourceNodes.foreach(sourceNode => {
+      getSinkNodes.foreach(sinkNode => {
+        if graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
+          amountOfLeaks = amountOfLeaks + 1
+      })
+    })
+    amountOfLeaks
+  }
 }
 
