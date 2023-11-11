@@ -1,7 +1,7 @@
 package br.unb.cic
 
 import br.unb.cic.syntax.NodeSVFA.{SinkNode, SourceNode}
-import br.unb.cic.syntax.{EdgeSVFA, NodeSVFA}
+import br.unb.cic.syntax.{NodeSVFA}
 import org.typelevel.paiges.Doc
 import scalax.collection.edges.{DiEdge, DiEdgeImplicits}
 import scalax.collection.mutable.Graph
@@ -12,7 +12,7 @@ class GraphSFVA {
 
   def addNode(node: NodeSVFA): Unit = graph.add(node)
 
-  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add((source ~> target))
+  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add(source ~> target)
 
   def getNodes: Set[NodeSVFA] = graph.nodes.map(n => n.outer).toSet
 

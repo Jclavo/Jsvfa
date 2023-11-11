@@ -14,7 +14,6 @@ import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
 import br.unb.cic.syntax.StmtSVFA.*
-import br.unb.cic.syntax.EdgeSVFA.*
 import br.unb.cic.syntax.{NodeSVFA, StmtSVFA, isSourceOrSinkStatement}
 import br.unb.cic.GraphSFVA
 
