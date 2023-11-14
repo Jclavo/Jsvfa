@@ -1,31 +1,18 @@
 package br.unb.cic
 
-import br.unb.cic.syntax.NodeSVFA.{SimpleNode, SinkNode, SourceNode}
-import br.unb.cic.syntax.NodeSVFA
+import br.unb.cic.syntax.NodeSVFA.{SinkNode, SourceNode}
+import br.unb.cic.syntax.{NodeSVFA}
 import org.typelevel.paiges.Doc
-import scalax.collection.edges.{DiEdgeImplicits}
-import scalax.collection.mutable.{Graph, TypedGraphFactory}
-import scalax.collection.edges.labeled.LDiEdge
-
-//case class MyEdge[+N](source: N, target: N, label: String) extends LDiEdge[N, String]  // CASE 1
+import scalax.collection.edges.{DiEdge, DiEdgeImplicits}
+import scalax.collection.mutable.Graph
 
 class GraphSFVA {
 
-//  val graph = Graph.empty[NodeSVFA, MyEdge[NodeSVFA]] // CASE 1
-  val graph = Graph.empty[NodeSVFA, LDiEdge[NodeSVFA, String]] // CASE 2
-//  val graph = Graph.empty[NodeSVFA, LDiEdge[NodeSVFA, String]] // CASE 3
-
+  val graph = Graph.empty[NodeSVFA, DiEdge[NodeSVFA]]
 
   def addNode(node: NodeSVFA): Unit = graph.add(node)
 
-//  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.addOne(MyEdge(source, target, "aaa")) // CASE 1
-
-//  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add(source ~>target :+ "aa") // CASE 2
-//  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph += (source ~> target :+ "aaa") // CASE 2
-
-//    def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add((source ~+> target)("Loves")) // CASE 3
-
-  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = {} //unknow case
+  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add(source ~> target)
 
   def getNodes: Set[NodeSVFA] = graph.nodes.map(n => n.outer).toSet
 
