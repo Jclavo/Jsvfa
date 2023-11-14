@@ -19,11 +19,11 @@ import br.unb.cic.GraphSFVA
 
 import java.util.Collections
 
-class JSVFA {
+abstract class JSVFA extends SVFA {
 
   var graphSFVA = new GraphSFVA()
 
-  private var view: JavaView = null
+  private var viewTemp: JavaView = null
 
   private var methodsVisited: Set[String] = Set()
 
@@ -41,14 +41,19 @@ class JSVFA {
     val classType = project.getIdentifierFactory().getClassType(s"$pathPackage.$className")
 
     // Create a view for project, which allows us to retrieve classes
-    view = project.createView()
+    viewTemp = project.createView()
 
     // Retrieve class
-    val sootClass = view.getClass(classType).get()
+    val sootClass = viewTemp.getClass(classType).get()
 
     sootClass.getMethods().forEach(method => {
       traverse(method)
     })
+  }
+
+  override def run(): Unit = {
+      setUpSoot()
+      traverse(getEntryPoint)
   }
 
   def traverse(method: SootMethod): Unit = {
