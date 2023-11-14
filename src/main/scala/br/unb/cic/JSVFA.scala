@@ -23,33 +23,7 @@ abstract class JSVFA extends SVFA {
 
   var graphSFVA = new GraphSFVA()
 
-  private var viewTemp: JavaView = null
-
   private var methodsVisited: Set[String] = Set()
-
-  def run(className: String, pathTestFile: String, pathPackage: String): Unit = {
-
-    val inputLocation = new JavaSourcePathAnalysisInputLocation(pathTestFile)
-
-    // Specify the language of the JavaProject.
-    val language = new JavaLanguage(8)
-
-    // Create a new JavaProject based on the input location
-    val project = JavaProject.builder(language).addInputLocation(inputLocation).build()
-
-    // Create a signature for the class we want to analyze
-    val classType = project.getIdentifierFactory().getClassType(s"$pathPackage.$className")
-
-    // Create a view for project, which allows us to retrieve classes
-    viewTemp = project.createView()
-
-    // Retrieve class
-    val sootClass = viewTemp.getClass(classType).get()
-
-    sootClass.getMethods().forEach(method => {
-      traverse(method)
-    })
-  }
 
   override def run(): Unit = {
       setUpSoot()
@@ -325,35 +299,6 @@ abstract class JSVFA extends SVFA {
         case _ =>
     })
     returnStmts
-  }
-
-
-  def getMainMethod(className: String, pathTestFile: String, pathPackage: String): Body = {
-
-    val inputLocation = new JavaSourcePathAnalysisInputLocation(pathTestFile)
-
-    // Specify the language of the JavaProject.
-    val language = new JavaLanguage(8)
-
-    // Create a new JavaProject based on the input location
-    val project = JavaProject.builder(language).addInputLocation(inputLocation).build()
-
-    // Create a signature for the class we want to analyze
-    val classType = project.getIdentifierFactory().getClassType(s"$pathPackage.$className")
-
-    // Create a signature for the method we want to analyze// Create a signature for the method we want to analyze
-    val methodSignature = project.getIdentifierFactory.getMethodSignature(classType, "main", "void", Collections.singletonList("java.lang.String[]"))
-
-    // Create a view for project, which allows us to retrieve classes
-    val view = project.createView()
-
-    // Retrieve class
-    val sootClass = view.getClass(classType).get()
-
-    // Retrieve method
-    val sootMethod = sootClass.getMethod(methodSignature.getSubSignature()).get()
-
-    sootMethod.getBody
   }
 }
 
