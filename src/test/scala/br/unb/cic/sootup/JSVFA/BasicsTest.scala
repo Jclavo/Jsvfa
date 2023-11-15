@@ -3,7 +3,7 @@ package br.unb.cic.sootup.JSVFA
 import br.unb.cic.sootup.JSVFATest
 import org.scalatest.funsuite.AnyFunSuite
 
-class Basics extends AnyFunSuite:
+class BasicsTest extends AnyFunSuite:
 
   test("simple_source_and_sink") {
 
