@@ -15,38 +15,3 @@ object StmtSVFA:
     case "JAssignStmt" => AssignmentStmt(stmt.asInstanceOf[JAssignStmt[?,?]])
     case "JInvokeStmt" => InvokeStmt(stmt.asInstanceOf[JInvokeStmt])
     case _ => InvalidStmt(stmt)
-
-  /**
-   * These functions returns the method's name
-   * if a statement is calling one
-   */
-  private def getMethodNameFromStmt(stmt: Stmt): String = {
-    StmtSVFA.convert(stmt) match {
-      case InvokeStmt(s) => getMethodNameFromStmt(s)
-      case AssignmentStmt(s) => getMethodNameFromStmt(s)
-      case _ => ""
-    }
-  }
-
-  private def getMethodNameFromStmt(invokeStmt: JInvokeStmt): String =
-    invokeStmt.getInvokeExpr.getMethodSignature.getName
-
-  private def getMethodNameFromStmt(assignmentStmt: JAssignStmt[?, ?]): String = {
-    assignmentStmt.getRightOp match
-      case r: AbstractInvokeExpr => r.getMethodSignature.getName
-      case _ => ""
-  }
-
-  def isSourceStmt(stmt: Stmt): Boolean = {
-    //more method name can be added here
-    List("source").indexOf(getMethodNameFromStmt(stmt)) match
-      case -1 => false
-      case _ => true
-  }
-
-  def isSinkStmt(stmt: Stmt): Boolean = {
-    //more method name can be added here
-    List("sink").indexOf(getMethodNameFromStmt(stmt)) match
-      case -1 => false
-      case _ => true
-  }
