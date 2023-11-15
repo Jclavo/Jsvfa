@@ -1,13 +1,14 @@
 package br.unb.cic.syntax
 
-import br.unb.cic.syntax.StmtSVFA
-import sootup.core.jimple.common.expr.AbstractInvokeExpr
-import sootup.core.jimple.common.stmt.{JAssignStmt, JInvokeStmt, Stmt}
+import sootup.core.jimple.common.stmt.{Stmt}
 import sootup.core.model.Body
 
 import scala.collection.mutable
 
 trait SourceAndSink {
+  
+  val sourceList: Set[String]
+  val sinkList: Set[String]
 
   private def getSourceAndSinkStatements(body: Body): mutable.HashMap[String, Set[Stmt]] = {
 
@@ -40,38 +41,7 @@ trait SourceAndSink {
       case _ => isSinkStmt(stmt)
   }
 
-  def isSourceStmt(stmt: Stmt): Boolean = {
-    //more method name can be added here
-    List("source").indexOf(getMethodNameFromStmt(stmt)) match
-      case -1 => false
-      case _ => true
-//    stmt.isInstanceOf
-  }
+  def isSourceStmt(stmt: Stmt): Boolean
 
-  def isSinkStmt(stmt: Stmt): Boolean = {
-    //more method name can be added here
-    List("sink").indexOf(getMethodNameFromStmt(stmt)) match
-      case -1 => false
-      case _ => true
-  }
-
-  /**
-   * These functions returns the method's name
-   * if a statement is calling one
-   */
-  private def getMethodNameFromStmt(stmt: Stmt): String = {
-    stmt match
-      case invokeStmt: JInvokeStmt => getMethodNameFromStmt(invokeStmt)
-      case assignStmt: JAssignStmt[?, ?] => getMethodNameFromStmt(assignStmt)
-      case _ => ""
-  }
-
-  private def getMethodNameFromStmt(invokeStmt: JInvokeStmt): String =
-    invokeStmt.getInvokeExpr.getMethodSignature.getName
-
-  private def getMethodNameFromStmt(assignmentStmt: JAssignStmt[?, ?]): String = {
-    assignmentStmt.getRightOp match
-      case invokeExp: AbstractInvokeExpr => invokeExp.getMethodSignature.getName
-      case _ => ""
-  }
+  def isSinkStmt(stmt: Stmt): Boolean
 }
