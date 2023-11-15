@@ -1,7 +1,6 @@
 package br.unb.cic.sootup.graph
 
 import br.unb.cic.sootup.JSVFATest
-import br.unb.cic.syntax.{getSinkStatements, getSourceStatements}
 import org.scalatest.funsuite.AnyFunSuite
 
 class ToDot extends AnyFunSuite:
