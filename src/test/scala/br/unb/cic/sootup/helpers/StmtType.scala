@@ -1,7 +1,6 @@
 package br.unb.cic.sootup.helpers
 
 import br.unb.cic.sootup.JSVFATest
-import br.unb.cic.syntax.{getSinkStatements, getSourceStatements}
 import org.scalatest.funsuite.AnyFunSuite
 
 class StmtType extends AnyFunSuite:
@@ -18,7 +17,7 @@ class StmtType extends AnyFunSuite:
     jsvfa.run()
     val body = jsvfa.getEntryPoint.getBody
 
-    assert(getSourceStatements(body).size === 1)
+    assert(jsvfa.getSourceStatements(body).size === 1)
   }
 
   test("method_has_sink_stmt") {
@@ -33,7 +32,7 @@ class StmtType extends AnyFunSuite:
     jsvfa.run()
     val body = jsvfa.getEntryPoint.getBody
 
-    assert(getSinkStatements(body).size === 1)
+    assert(jsvfa.getSinkStatements(body).size === 1)
   }
 
   test("method_has_not_source_or_sink") {
@@ -48,6 +47,6 @@ class StmtType extends AnyFunSuite:
     jsvfa.run()
     val body = jsvfa.getEntryPoint.getBody
 
-    assert(getSourceStatements(body).size === 0)
-    assert(getSinkStatements(body).size === 0)
+    assert(jsvfa.getSourceStatements(body).size === 0)
+    assert(jsvfa.getSinkStatements(body).size === 0)
   }
