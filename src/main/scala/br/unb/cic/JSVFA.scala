@@ -16,7 +16,6 @@ import sootup.core.model.Body
 import br.unb.cic.syntax.StmtSVFA.*
 import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
-
 import java.util.Collections
 
 abstract class JSVFA extends SVFA with SourceAndSink {
@@ -147,8 +146,8 @@ abstract class JSVFA extends SVFA with SourceAndSink {
         val opLocal = rValue.asInstanceOf[Local]
 
         opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
-          val from = NodeSVFA.createNode(calleeMethod, d)
-          val to = NodeSVFA.createNode(calleeMethod, r)
+          val from = createNode(calleeMethod, d)
+          val to = createNode(calleeMethod, r)
           graphSFVA.addEdge(from, to)
         })
       }
@@ -160,8 +159,8 @@ abstract class JSVFA extends SVFA with SourceAndSink {
        * but I am not sure if creating it when it is an Invoke
        */
       if (invokeStmt.isInstanceOf[JAssignStmt[?, ?]]) {
-        val from = NodeSVFA.createNode(calleeMethod, r)
-        val to = NodeSVFA.createNode(callerMethod, invokeStmt)
+        val from = createNode(calleeMethod, r)
+        val to = createNode(callerMethod, invokeStmt)
         graphSFVA.addEdge(from, to)
       }
     })
@@ -188,12 +187,12 @@ abstract class JSVFA extends SVFA with SourceAndSink {
         return
       }
 
-      val pivotCallerNode = NodeSVFA.createNode(callerMethod, invokeStmt)
+      val pivotCallerNode = createNode(callerMethod, invokeStmt)
 
       parameterLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
 
-        val from = NodeSVFA.createNode(callerMethod, d)
-        val to = NodeSVFA.createNode(calleeMethod, parameterDeclarationStmt.get)
+        val from = createNode(callerMethod, d)
+        val to = createNode(calleeMethod, parameterDeclarationStmt.get)
 
         /**
          * check if it is source or sink node
@@ -221,8 +220,8 @@ abstract class JSVFA extends SVFA with SourceAndSink {
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
     invokeLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
-      val from = NodeSVFA.createNode(callerMethod, d)
-      val to = NodeSVFA.createNode(calleeMethod, calleeMethod.getBody.getThisStmt)
+      val from = createNode(callerMethod, d)
+      val to = createNode(calleeMethod, calleeMethod.getBody.getThisStmt)
       graphSFVA.addEdge(from, to)
     })
   }
@@ -236,8 +235,8 @@ abstract class JSVFA extends SVFA with SourceAndSink {
    */
   private def ruleCopy(rightLocal: Local, assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     rightLocal.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
-        val from = NodeSVFA.createNode(method, d)
-        val to = NodeSVFA.createNode(method, assignmentStmt.stmt)
+        val from = createNode(method, d)
+        val to = createNode(method, assignmentStmt.stmt)
       graphSFVA.addEdge(from, to)
     })
   }
@@ -300,6 +299,12 @@ abstract class JSVFA extends SVFA with SourceAndSink {
     })
     returnStmts
   }
+
+  private def createNode(method: SootMethod, stmt: Stmt): NodeSVFA = isSourceStmt(stmt) match
+    case true => NodeSVFA.SourceNode(method, stmt)
+    case _ => isSinkStmt(stmt) match
+      case true => NodeSVFA.SinkNode(method, stmt)
+      case _ => NodeSVFA.SimpleNode(method, stmt)
 }
 
 
