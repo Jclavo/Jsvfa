@@ -14,12 +14,12 @@ import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
 import br.unb.cic.syntax.StmtSVFA.*
-import br.unb.cic.syntax.{NodeSVFA, StmtSVFA, isSourceOrSinkStatement}
+import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
 
 import java.util.Collections
 
-abstract class JSVFA extends SVFA {
+abstract class JSVFA extends SVFA with SourceAndSink {
 
   var graphSFVA = new GraphSFVA()
 
