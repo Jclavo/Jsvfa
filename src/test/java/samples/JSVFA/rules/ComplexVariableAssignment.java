@@ -13,12 +13,12 @@ public class ComplexVariableAssignment {
 }
 
 /**
- * br.unb.cic.sootup.resources.JSVFA.rules.ComplexVariableAssignment r0;
+ * samples.JSVFA.rules.ComplexVariableAssignment r0;
  * int $i0, $i1, $i2, $i3;
  * java.lang.String[] $r1;
  *
  *
- * r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.ComplexVariableAssignment;
+ * r0 := @this: samples.JSVFA.rules.ComplexVariableAssignment;
  * $r1 := @parameter0: java.lang.String[];
  * $i0 = 0;
  * $i1 = 0;

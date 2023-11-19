@@ -8,10 +8,10 @@ class RuleReturnTest extends AnyFunSuite:
   test("simple_return") {
     
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn",
+      "samples.JSVFA.rules.call.simpleReturn",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call"
+      "src/test/java/samples/JSVFA/rules/call"
     )
     jsvfa.run()
 
@@ -22,10 +22,10 @@ class RuleReturnTest extends AnyFunSuite:
   test("complex_return") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn",
+      "samples.JSVFA.rules.call.complexReturn",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call"
+      "src/test/java/samples/JSVFA/rules/call"
     )
     jsvfa.run()
 
@@ -35,10 +35,10 @@ class RuleReturnTest extends AnyFunSuite:
   test("simple_return_string") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturnString",
+      "samples.JSVFA.rules.call.simpleReturnString",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call"
+      "src/test/java/samples/JSVFA/rules/call"
     )
     jsvfa.run()
 

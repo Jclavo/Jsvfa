@@ -8,10 +8,10 @@ class RuleCallTest extends AnyFunSuite:
   test("simple_call_without_parameters") {
     
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithoutParameters",
+      "samples.JSVFA.rules.call.simpleCallWithoutParameters",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call"
+      "src/test/java/samples/JSVFA/rules/call"
     )
     jsvfa.run()
 
@@ -22,10 +22,10 @@ class RuleCallTest extends AnyFunSuite:
   test("complex_call_without_parameters") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithoutParameters",
+      "samples.JSVFA.rules.call.complexCallWithoutParameters",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call"
+      "src/test/java/samples/JSVFA/rules/call"
     )
     jsvfa.run()
 
@@ -35,10 +35,10 @@ class RuleCallTest extends AnyFunSuite:
   test("simple_call_with_parameter") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters",
+      "samples.JSVFA.rules.call.simpleCallWithParameters",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call"
+      "src/test/java/samples/JSVFA/rules/call"
     )
     jsvfa.run()
 
@@ -48,10 +48,10 @@ class RuleCallTest extends AnyFunSuite:
   test("complex_call_with_parameter") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters",
+      "samples.JSVFA.rules.call.complexCallWithParameters",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/call"
+      "src/test/java/samples/JSVFA/rules/call"
     )
     jsvfa.run()
 

@@ -25,30 +25,30 @@ public class simpleCallWithParameters {
 /**
  * main
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters r0;
+ *     samples.JSVFA.rules.call.simpleCallWithParameters r0;
  *     int $i0, $i1;
  *     java.lang.String[] $r1;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters;
+ *     r0 := @this: samples.JSVFA.rules.call.simpleCallWithParameters;
  *     $r1 := @parameter0: java.lang.String[];
  *     $i0 = 0;
  *     $i1 = 0;
  *     $i0 = 1;
  *     $i1 = 2;
- *     virtualinvoke r0.<br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters: void sum(int,int)>($i0, $i1);
+ *     virtualinvoke r0.<samples.JSVFA.rules.call.simpleCallWithParameters: void sum(int,int)>($i0, $i1);
  *
  *     return;
  * }
  *
  * sum
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters r0;
+ *     samples.JSVFA.rules.call.simpleCallWithParameters r0;
  *     int $i0, $i1, $i2, $i3;
  *     java.io.PrintStream $r1;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters;
+ *     r0 := @this: samples.JSVFA.rules.call.simpleCallWithParameters;
  *     $i0 := @parameter0: int;
  *     $i1 := @parameter1: int;
  *     $i2 = 0;
@@ -62,10 +62,10 @@ public class simpleCallWithParameters {
  *
  * <init>
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters r0;
+ *     samples.JSVFA.rules.call.simpleCallWithParameters r0;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.simpleCallWithParameters;
+ *     r0 := @this: samples.JSVFA.rules.call.simpleCallWithParameters;
  *     specialinvoke r0.<java.lang.Object: void <init>()>();
  *
  *     return;

@@ -8,10 +8,10 @@ class BasicsTest extends AnyFunSuite:
   test("simple_source_and_sink") {
 
      val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.cases.basic.simpleLeak",
+      "samples.JSVFA.cases.basic.simpleLeak",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/cases/basic"
+      "src/test/java/samples/JSVFA/cases/basic"
     )
 
     jsvfa.run()

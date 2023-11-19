@@ -8,10 +8,10 @@ class RuleCopyTest extends AnyFunSuite:
   test("variable_simple_assignment") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.SimpleVariableAssignment",
+      "samples.JSVFA.rules.SimpleVariableAssignment",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules"
+      "src/test/java/samples/JSVFA/rules"
     )
 
     jsvfa.run()
@@ -22,10 +22,10 @@ class RuleCopyTest extends AnyFunSuite:
    test("variable_complex_assignment") {
 
      val jsvfa = JSVFATest(
-       "br.unb.cic.sootup.resources.JSVFA.rules.SimpleVariableAssignment",
+       "samples.JSVFA.rules.SimpleVariableAssignment",
        "main",
        "void",
-       "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules"
+       "src/test/java/samples/JSVFA/rules"
      )
      jsvfa.run()
 
@@ -34,10 +34,10 @@ class RuleCopyTest extends AnyFunSuite:
 
   test("variable_full_assignment") {
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.FullVariableAssignment",
+      "samples.JSVFA.rules.FullVariableAssignment",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules"
+      "src/test/java/samples/JSVFA/rules"
     )
     jsvfa.run()
 
@@ -46,10 +46,10 @@ class RuleCopyTest extends AnyFunSuite:
 
   test("calculator_simple") {
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.basic.CalculatorSimple",
+      "samples.basic.CalculatorSimple",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/basic"
+      "src/test/java/samples/basic"
     )
     jsvfa.run()
 
@@ -58,7 +58,7 @@ class RuleCopyTest extends AnyFunSuite:
 
 //  test("NumberSign") {
 //    val jsvfa = JSVFA()
-//    jsvfa.run("NumberSign", "src/test/scala/br/unb/cic/sootup/resources/basic", "br.unb.cic.sootup.resources.basic")
+//    jsvfa.run("NumberSign", "src/test/java/samples/basic", "samples.basic")
 //    println(jsvfa.graphSFVA.exportToDot())
 //    assert(jsvfa.graphSFVA.edgesTotal() === 3)
 //  }

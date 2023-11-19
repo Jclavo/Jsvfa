@@ -28,19 +28,19 @@ public class simpleReturn {
 /**
  * main
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn r0;
+ *     samples.JSVFA.rules.call.simpleReturn r0;
  *     int $i0, $i1, $i2, $i3, $i4;
  *     java.io.PrintStream $r2;
  *     java.lang.String[] $r1;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn;
+ *     r0 := @this: samples.JSVFA.rules.call.simpleReturn;
  *     $r1 := @parameter0: java.lang.String[];
  *     $i0 = 0;
  *     $i1 = 0;
  *     $i2 = 0;
  *     $i0 = 1;
- *     $i3 = virtualinvoke r0.<br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn: int getMagicNumber()>();
+ *     $i3 = virtualinvoke r0.<samples.JSVFA.rules.call.simpleReturn: int getMagicNumber()>();
  *     $i1 = $i3;
  *     $i4 = $i0 + $i1;
  *     $i2 = $i4;
@@ -52,10 +52,10 @@ public class simpleReturn {
  *
  * <init>
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn r0;
+ *     samples.JSVFA.rules.call.simpleReturn r0;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn;
+ *     r0 := @this: samples.JSVFA.rules.call.simpleReturn;
  *     specialinvoke r0.<java.lang.Object: void <init>()>();
  *
  *     return;
@@ -63,11 +63,11 @@ public class simpleReturn {
  *
  * getMagicNumber
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn r0;
+ *     samples.JSVFA.rules.call.simpleReturn r0;
  *     int $i0;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.simpleReturn;
+ *     r0 := @this: samples.JSVFA.rules.call.simpleReturn;
  *     $i0 = 0;
  *     $i0 = 69;
  *

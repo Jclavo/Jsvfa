@@ -29,8 +29,8 @@ public class ComplexPointerAssignment {
 
 /**
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.pointers.classX $r1;
- *     br.unb.cic.sootup.resources.JSVFA.rules.pointers.classY $r2;
+ *     samples.JSVFA.rules.pointers.classX $r1;
+ *     samples.JSVFA.rules.pointers.classY $r2;
  *     java.io.PrintStream $r3, $r4;
  *     java.lang.String[] $r0;
  *     unknown $u0, $u1, $u2, $u3, $u4;
@@ -42,11 +42,11 @@ public class ComplexPointerAssignment {
  *     $u2 = null;
  *     $u3 = null;
  *     $u4 = null;
- *     $r1 = new br.unb.cic.sootup.resources.JSVFA.rules.pointers.classX;
- *     specialinvoke $r1.<br.unb.cic.sootup.resources.JSVFA.rules.pointers.classX: void <init>()>();
+ *     $r1 = new samples.JSVFA.rules.pointers.classX;
+ *     specialinvoke $r1.<samples.JSVFA.rules.pointers.classX: void <init>()>();
  *     $u0 = $r1;
- *     $r2 = new br.unb.cic.sootup.resources.JSVFA.rules.pointers.classY;
- *     specialinvoke $r2.<br.unb.cic.sootup.resources.JSVFA.rules.pointers.classY: void <init>()>();
+ *     $r2 = new samples.JSVFA.rules.pointers.classY;
+ *     specialinvoke $r2.<samples.JSVFA.rules.pointers.classY: void <init>()>();
  *     $u3 = $r2;
  *     $u1 = $u0;
  *     $u4 = $u3;
@@ -60,10 +60,10 @@ public class ComplexPointerAssignment {
  * }
  *
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.pointers.ComplexPointerAssignment r0;
+ *     samples.JSVFA.rules.pointers.ComplexPointerAssignment r0;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.pointers.ComplexPointerAssignment;
+ *     r0 := @this: samples.JSVFA.rules.pointers.ComplexPointerAssignment;
  *     specialinvoke r0.<java.lang.Object: void <init>()>();
  *
  *     return;

@@ -7,10 +7,10 @@ class RuleCopyPointersTest extends AnyFunSuite:
 
   ignore("simple_pointers_assignment") {
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.pointers.SimplePointerAssignment",
+      "samples.JSVFA.rules.pointers.SimplePointerAssignment",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/pointers"
+      "src/test/java/samples/JSVFA/rules/pointers"
     )
     jsvfa.run()
 //    println(jsvfa.graphSFVA.exportToDot())
@@ -19,10 +19,10 @@ class RuleCopyPointersTest extends AnyFunSuite:
 
   ignore("complex_pointers_assignment") {
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.pointers.ComplexPointerAssignment",
+      "samples.JSVFA.rules.pointers.ComplexPointerAssignment",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules/pointers"
+      "src/test/java/samples/JSVFA/rules/pointers"
     )
     jsvfa.run()
 

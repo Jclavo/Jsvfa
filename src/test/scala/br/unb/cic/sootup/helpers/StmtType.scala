@@ -8,10 +8,10 @@ class StmtType extends AnyFunSuite:
   test("method_has_source_stmt") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.cases.basic.simpleLeak",
+      "samples.JSVFA.cases.basic.simpleLeak",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/cases/basic"
+      "src/test/java/samples/JSVFA/cases/basic"
     )
 
     jsvfa.run()
@@ -23,10 +23,10 @@ class StmtType extends AnyFunSuite:
   test("method_has_sink_stmt") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.cases.basic.simpleLeak",
+      "samples.JSVFA.cases.basic.simpleLeak",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/cases/basic"
+      "src/test/java/samples/JSVFA/cases/basic"
     )
 
     jsvfa.run()
@@ -38,10 +38,10 @@ class StmtType extends AnyFunSuite:
   test("method_has_not_source_or_sink") {
 
     val jsvfa = JSVFATest(
-      "br.unb.cic.sootup.resources.JSVFA.rules.SimpleVariableAssignment",
+      "samples.JSVFA.rules.SimpleVariableAssignment",
       "main",
       "void",
-      "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules"
+      "src/test/java/samples/JSVFA/rules"
     )
 
     jsvfa.run()

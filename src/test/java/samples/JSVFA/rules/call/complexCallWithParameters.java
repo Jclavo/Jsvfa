@@ -41,12 +41,12 @@ public class complexCallWithParameters {
 /**
  * main
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters r0;
+ *     samples.JSVFA.rules.call.complexCallWithParameters r0;
  *     int $i0, $i1, $i2, $i3, $i4, $i5;
  *     java.lang.String[] $r1;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters;
+ *     r0 := @this: samples.JSVFA.rules.call.complexCallWithParameters;
  *     $r1 := @parameter0: java.lang.String[];
  *     $i0 = 0;
  *     $i1 = 0;
@@ -56,25 +56,25 @@ public class complexCallWithParameters {
  *     $i5 = 0;
  *     $i0 = 1;
  *     $i1 = 2;
- *     virtualinvoke r0.<br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters: void sum(int,int)>($i0, $i1);
+ *     virtualinvoke r0.<samples.JSVFA.rules.call.complexCallWithParameters: void sum(int,int)>($i0, $i1);
  *     $i2 = 10;
  *     $i3 = 5;
- *     virtualinvoke r0.<br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters: void sub(int,int)>($i2, $i3);
+ *     virtualinvoke r0.<samples.JSVFA.rules.call.complexCallWithParameters: void sub(int,int)>($i2, $i3);
  *     $i4 = 3;
  *     $i5 = 4;
- *     virtualinvoke r0.<br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters: void sum(int,int)>($i4, $i5);
+ *     virtualinvoke r0.<samples.JSVFA.rules.call.complexCallWithParameters: void sum(int,int)>($i4, $i5);
  *
  *     return;
  * }
  *
  * sum
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters r0;
+ *     samples.JSVFA.rules.call.complexCallWithParameters r0;
  *     int $i0, $i1, $i2, $i3;
  *     java.io.PrintStream $r1;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters;
+ *     r0 := @this: samples.JSVFA.rules.call.complexCallWithParameters;
  *     $i0 := @parameter0: int;
  *     $i1 := @parameter1: int;
  *     $i2 = 0;
@@ -88,12 +88,12 @@ public class complexCallWithParameters {
  *
  * sub
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters r0;
+ *     samples.JSVFA.rules.call.complexCallWithParameters r0;
  *     int $i0, $i1, $i2, $i3;
  *     java.io.PrintStream $r1;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters;
+ *     r0 := @this: samples.JSVFA.rules.call.complexCallWithParameters;
  *     $i0 := @parameter0: int;
  *     $i1 := @parameter1: int;
  *     $i2 = 0;
@@ -107,10 +107,10 @@ public class complexCallWithParameters {
  *
  * <init>
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters r0;
+ *     samples.JSVFA.rules.call.complexCallWithParameters r0;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.complexCallWithParameters;
+ *     r0 := @this: samples.JSVFA.rules.call.complexCallWithParameters;
  *     specialinvoke r0.<java.lang.Object: void <init>()>();
  *
  *     return;

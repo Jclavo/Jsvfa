@@ -29,11 +29,11 @@ public class complexReturn {
  *
  * getMagicNumber
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn r0;
+ *     samples.JSVFA.rules.call.complexReturn r0;
  *     int $i0;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn;
+ *     r0 := @this: samples.JSVFA.rules.call.complexReturn;
  *     $i0 = 0;
  *     $i0 = 69;
  *
@@ -42,10 +42,10 @@ public class complexReturn {
  *
  * <init>
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn r0;
+ *     samples.JSVFA.rules.call.complexReturn r0;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn;
+ *     r0 := @this: samples.JSVFA.rules.call.complexReturn;
  *     specialinvoke r0.<java.lang.Object: void <init>()>();
  *
  *     return;
@@ -53,20 +53,20 @@ public class complexReturn {
  *
  * main
  * {
- *     br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn r0;
+ *     samples.JSVFA.rules.call.complexReturn r0;
  *     int $i0, $i1, $i2, $i3, $i4, $i5;
  *     java.io.PrintStream $r2;
  *     java.lang.String[] $r1;
  *
  *
- *     r0 := @this: br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn;
+ *     r0 := @this: samples.JSVFA.rules.call.complexReturn;
  *     $r1 := @parameter0: java.lang.String[];
  *     $i0 = 0;
  *     $i1 = 0;
  *     $i2 = 0;
- *     $i3 = virtualinvoke r0.<br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn: int getMagicNumber()>();
+ *     $i3 = virtualinvoke r0.<samples.JSVFA.rules.call.complexReturn: int getMagicNumber()>();
  *     $i0 = $i3;
- *     $i4 = virtualinvoke r0.<br.unb.cic.sootup.resources.JSVFA.rules.call.complexReturn: int getMagicNumber()>();
+ *     $i4 = virtualinvoke r0.<samples.JSVFA.rules.call.complexReturn: int getMagicNumber()>();
  *     $i1 = $i4;
  *     $i5 = $i0 + $i1;
  *     $i2 = $i5;
