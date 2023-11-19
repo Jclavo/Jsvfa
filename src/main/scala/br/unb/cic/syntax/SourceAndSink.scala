@@ -7,9 +7,6 @@ import scala.collection.mutable
 
 trait SourceAndSink {
   
-  val sourceList: Set[String]
-  val sinkList: Set[String]
-
   private def getSourceAndSinkStatements(body: Body): mutable.HashMap[String, Set[Stmt]] = {
 
     val sourceStmt: mutable.HashMap[String, Set[Stmt]] = mutable.HashMap()
