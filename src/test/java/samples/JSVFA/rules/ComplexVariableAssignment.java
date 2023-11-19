@@ -1,4 +1,4 @@
-package br.unb.cic.sootup.resources.JSVFA.rules;
+package samples.JSVFA.rules;
 
 public class ComplexVariableAssignment {
 

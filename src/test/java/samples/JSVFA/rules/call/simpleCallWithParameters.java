@@ -1,4 +1,4 @@
-package br.unb.cic.sootup.resources.JSVFA.rules.call;
+package samples.JSVFA.rules.call;
 
 public class simpleCallWithParameters {
 

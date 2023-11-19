@@ -1,8 +1,8 @@
-package br.unb.cic.sootup.resources.basic;
+package samples.basic;
 
 import java.util.Random;
 
-public class NumberSign {
+public class NumberSignDeprecated {
 
     public static void main(String[] var0)
     {
@@ -14,14 +14,14 @@ public class NumberSign {
         n = new Random().nextInt(max - min) + min;
 
         if (n > 0) {
-            message = "positive";
+            message = n + " is positive";
         }
         else {
             if (n == 0) {
-                message = "zero";
+                message = n + " is zero";
             }
             else {
-                message = "negative";
+                message = n + " is negative";
             }
         }
 

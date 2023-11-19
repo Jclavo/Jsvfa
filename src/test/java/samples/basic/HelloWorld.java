@@ -1,4 +1,4 @@
-package br.unb.cic.sootup.resources.basic;
+package samples.basic;
 
 public class HelloWorld {
     public static void main(String[] var0) {

@@ -1,4 +1,4 @@
-package br.unb.cic.sootup.resources.JSVFA.cases.basic;
+package samples.JSVFA.cases.basic;
 
 public class simpleLeak {
 

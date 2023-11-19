@@ -1,4 +1,4 @@
-package br.unb.cic.sootup.resources.JSVFA.rules.pointers;
+package samples.JSVFA.rules.pointers;
 
 class classA {
     public int value;
