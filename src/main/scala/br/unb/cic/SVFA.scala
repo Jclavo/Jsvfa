@@ -24,7 +24,7 @@ abstract class SVFA {
 
     def getPathTest: String
 
-    private def getJavaVersionForAnalysis: Int = 8
+    def getJavaVersionForAnalysis: Int
 
     def run(): Unit
 

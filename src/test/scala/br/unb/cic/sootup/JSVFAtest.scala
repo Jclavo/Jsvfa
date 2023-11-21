@@ -21,6 +21,8 @@ class JSVFATest(className: String,
 
   override def getPathTest: String = pathTest
 
+  override def getJavaVersionForAnalysis: Int = 8
+
   override def isSourceStmt(stmt: Stmt): Boolean = {
     sourceList.find(_ == getMethodNameFromStmt(stmt)) match
       case Some(_) => true
