@@ -32,11 +32,7 @@ trait SourceAndSink {
     getSourceAndSinkStatements(body)("sink")
   }
 
-  def isSourceOrSinkStatement(stmt: Stmt): Boolean = {
-    isSourceStmt(stmt) match
-      case true => true
-      case _ => isSinkStmt(stmt)
-  }
+  def isSourceOrSinkStatement(stmt: Stmt): Boolean = isSourceStmt(stmt) || isSinkStmt(stmt)
 
   def isSourceStmt(stmt: Stmt): Boolean
 
