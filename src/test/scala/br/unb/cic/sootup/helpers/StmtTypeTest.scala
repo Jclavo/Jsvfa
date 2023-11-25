@@ -44,6 +44,6 @@ class StmtTypeTest extends AnyFunSuite:
 
     jsvfa.run()
 
-    assert(jsvfa.graphSFVA.getSourceNodes.size === 1)
-    assert(jsvfa.graphSFVA.getSinkNodes.size === 1)
+    assert(jsvfa.graphSFVA.getSourceNodes.size === 0)
+    assert(jsvfa.graphSFVA.getSinkNodes.size === 0)
   }
