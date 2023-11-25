@@ -16,6 +16,8 @@ import sootup.core.model.Body
 import br.unb.cic.syntax.StmtSVFA.*
 import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
+import sootup.core.views.View
+
 import java.util.Collections
 
 abstract class JSVFA extends SVFABase with SourceAndSink {
@@ -25,10 +27,13 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
   private var methodsVisited: Set[String] = Set()
 
   override def run(): Unit = {
-      traverse(getEntryPoint())
+      val project = createProject()
+      val view = createView(project)
+
+      traverse(view, getEntryPoint(project, view))
   }
 
-  def traverse(method: SootMethod): Unit = {
+  def traverse(view: View[?], method: SootMethod): Unit = {
     val body = method.getBody
     val stmtGraph = body.getStmtGraph()
     val methodName = method.getName
@@ -42,36 +47,36 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
 //    println(methodName + "\n" + method.getBody())
 
     body.getStmts().forEach(stmt => {
-      analyzer(stmt, method, stmtGraph)
+      analyzer(view, stmt, method, stmtGraph)
     })
   }
 
-  private def analyzer(stmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+  private def analyzer(view: View[?], stmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
 
       val stmtSVFA = StmtSVFA.convert(stmt)
 
       stmtSVFA match
-        case AssignmentStmt(s) => AnalyzerAssignments(AssignmentStmt(s), method, stmtGraph) // a = *
-        case InvokeStmt(s) => AnalyzerInvokes(InvokeStmt(s), method, stmtGraph) // *.myFunction(...)
+        case AssignmentStmt(s) => AnalyzerAssignments(view, AssignmentStmt(s), method, stmtGraph) // a = *
+        case InvokeStmt(s) => AnalyzerInvokes(view, InvokeStmt(s), method, stmtGraph) // *.myFunction(...)
         case _ =>
   }
 
-  private def AnalyzerAssignments(assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+  private def AnalyzerAssignments(view: View[?], assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     val leftOp = assignmentStmt.stmt.getLeftOp
     val rightOp = assignmentStmt.stmt.getRightOp
 
     (leftOp, rightOp) match
-      case (_: Local, r: AbstractInvokeExpr) =>  AnalyzerInvokes(r, assignmentStmt.stmt, method, stmtGraph)
+      case (_: Local, r: AbstractInvokeExpr) =>  AnalyzerInvokes(view, r, assignmentStmt.stmt, method, stmtGraph)
       case (_: Local, r: Local) => ruleCopy(r, assignmentStmt, method, stmtGraph) // a = b
       case (_: Local, _) => ruleCopyExpression(assignmentStmt, method, stmtGraph) // a = b + c
       case (_, _) =>
   }
 
-  private def AnalyzerInvokes(invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
-    AnalyzerInvokes(invokeStmt.stmt.getInvokeExpr, invokeStmt.stmt, method, stmtGraph)
+  private def AnalyzerInvokes(view: View[?], invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+    AnalyzerInvokes(view, invokeStmt.stmt.getInvokeExpr, invokeStmt.stmt, method, stmtGraph)
   }
 
-  private def AnalyzerInvokes(invokeExp: AbstractInvokeExpr, invokeStmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+  private def AnalyzerInvokes(view: View[?], invokeExp: AbstractInvokeExpr, invokeStmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     //    println(invokeStmt.stmt.getInvokeExpr.getMethodSignature.getDeclClassType)
 
     if (! view.getMethod(invokeExp.getMethodSignature).isPresent) {
@@ -103,7 +108,7 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
     // 3. create edge to "return"
     defsToReturn(invokeStmt, method, calleeMethod)
 
-    traverse(calleeMethod)
+    traverse(view, calleeMethod)
   }
 
   /**

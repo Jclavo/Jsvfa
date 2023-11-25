@@ -13,9 +13,7 @@ import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
 import java.util.Collections
 
 abstract class SVFABase {
-
-    var view: View[?] = null
-  
+    
     def getClassName: String
 
     def getMainMethodName: String
@@ -30,7 +28,7 @@ abstract class SVFABase {
 
     def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass]
     
-    private def createProject(): Project[?, ?] = {
+    def createProject(): Project[?, ?] = {
         val inputLocation = getPathAnalysisInputLocation()
 
         // Specify the language of the JavaProject.
@@ -40,14 +38,10 @@ abstract class SVFABase {
         JavaProject.builder(language).addInputLocation(inputLocation).build()
     }
 
-    private def createView(project: Project[?, ?]): Unit = {
-        view = project.createView()
-    }
+    def createView(project: Project[?, ?]): View[?] = project.createView()
 
-    def getEntryPoint(): SootMethod = {
+    def getEntryPoint(project: Project[?, ?], view: View[?]): SootMethod = {
 
-        val project = createProject()
-        createView(project)
         // Create a signature for the class we want to analyze
         val classType = project.getIdentifierFactory().getClassType(s"$getClassName")
 
@@ -59,8 +53,8 @@ abstract class SVFABase {
             Collections.singletonList("java.lang.String[]") // TO-DO: I need to check if it needs to
         )
 
-        getMethodByName(methodSignature)
+        getMethodByName(view, methodSignature)
     }
 
-    def getMethodByName(methodSignature: MethodSignature): SootMethod = view.getMethod(methodSignature).get()
+    private def getMethodByName(view: View[?], methodSignature: MethodSignature): SootMethod = view.getMethod(methodSignature).get()
 }
