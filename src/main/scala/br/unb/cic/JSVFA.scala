@@ -25,8 +25,7 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
   private var methodsVisited: Set[String] = Set()
 
   override def run(): Unit = {
-      setUpSoot()
-      traverse(getEntryPoint)
+      traverse(getEntryPoint())
   }
 
   def traverse(method: SootMethod): Unit = {

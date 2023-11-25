@@ -14,7 +14,6 @@ import java.util.Collections
 
 abstract class SVFABase {
 
-    var project: Project[?, ?] = null
     var view: View[?] = null
   
     def getClassName: String
@@ -29,28 +28,26 @@ abstract class SVFABase {
 
     def run(): Unit
 
-    def setUpSoot(): Unit = {
-        createProject
-        createView
-    }
-
     def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass]
     
-    private def createProject: Unit = {
+    private def createProject(): Project[?, ?] = {
         val inputLocation = getPathAnalysisInputLocation()
 
         // Specify the language of the JavaProject.
         val language = new JavaLanguage(getJavaVersionForAnalysis)
 
         // Create a new JavaProject based on the input location
-        project = JavaProject.builder(language).addInputLocation(inputLocation).build()
+        JavaProject.builder(language).addInputLocation(inputLocation).build()
     }
 
-    private def createView: Unit = {
+    private def createView(project: Project[?, ?]): Unit = {
         view = project.createView()
     }
 
-    def getEntryPoint: SootMethod = {
+    def getEntryPoint(): SootMethod = {
+
+        val project = createProject()
+        createView(project)
         // Create a signature for the class we want to analyze
         val classType = project.getIdentifierFactory().getClassType(s"$getClassName")
 
@@ -65,7 +62,5 @@ abstract class SVFABase {
         getMethodByName(methodSignature)
     }
 
-    def getMethodByName(methodSignature: MethodSignature): SootMethod = {
-        view.getMethod(methodSignature).get()
-    }
+    def getMethodByName(methodSignature: MethodSignature): SootMethod = view.getMethod(methodSignature).get()
 }
