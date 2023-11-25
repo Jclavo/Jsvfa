@@ -2,8 +2,11 @@ package br.unb.cic.sootup
 
 import br.unb.cic.JSVFA
 import br.unb.cic.syntax.StmtSVFA
+import sootup.core.inputlocation.AnalysisInputLocation
 import sootup.core.jimple.common.expr.AbstractInvokeExpr
 import sootup.core.jimple.common.stmt.{JAssignStmt, JInvokeStmt, Stmt}
+import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
+import sootup.java.core.JavaSootClass
 
 class JSVFATest(className: String, 
                 mainMethodName: String, 
@@ -22,6 +25,8 @@ class JSVFATest(className: String,
   override def getPathTest: String = pathTest
 
   override def getJavaVersionForAnalysis: Int = 8
+
+  override def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass] = new JavaSourcePathAnalysisInputLocation(getPathTest)
 
   override def isSourceStmt(stmt: Stmt): Boolean = {
     sourceList.find(_ == getMethodNameFromStmt(stmt)) match

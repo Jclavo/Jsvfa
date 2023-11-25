@@ -2,10 +2,11 @@ package br.unb.cic
 
 import org.eclipse.jdt.internal.codeassist.complete.CompletionOnMethodReturnType
 import sootup.core.Project
+import sootup.core.inputlocation.AnalysisInputLocation
 import sootup.core.model.SootMethod
 import sootup.core.signatures.MethodSignature
 import sootup.core.views.View
-import sootup.java.core.JavaProject
+import sootup.java.core.{JavaProject, JavaSootClass}
 import sootup.java.core.language.JavaLanguage
 import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
 
@@ -33,8 +34,10 @@ abstract class SVFA {
         createView
     }
 
+    def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass]
+    
     private def createProject: Unit = {
-        val inputLocation = new JavaSourcePathAnalysisInputLocation(getPathTest)
+        val inputLocation = getPathAnalysisInputLocation()
 
         // Specify the language of the JavaProject.
         val language = new JavaLanguage(getJavaVersionForAnalysis)
