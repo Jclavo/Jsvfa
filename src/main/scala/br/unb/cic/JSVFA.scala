@@ -18,7 +18,7 @@ import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
 import java.util.Collections
 
-abstract class JSVFA extends SVFA with SourceAndSink {
+abstract class JSVFA extends SVFABase with SourceAndSink {
 
   var graphSFVA = new GraphSFVA()
 

@@ -12,7 +12,7 @@ import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
 
 import java.util.Collections
 
-abstract class SVFA {
+abstract class SVFABase {
 
     var project: Project[?, ?] = null
     var view: View[?] = null
