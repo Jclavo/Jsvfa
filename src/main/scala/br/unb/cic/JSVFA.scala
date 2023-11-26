@@ -165,7 +165,7 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
       if (invokeStmt.isInstanceOf[JAssignStmt[?, ?]]) {
         val from = createNode(calleeMethod, r)
         val to = createNode(callerMethod, invokeStmt)
-        graphSFVA.addEdge(from, to)
+        graphSFVA.addEdgeCloseCS(from, to)
       }
     })
   }
@@ -202,9 +202,10 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
          * check if it is source or sink node
          * to select which nodes will be connected
          */
-        isSourceOrSinkNode match
-          case true => graphSFVA.addEdge(from, pivotCallerNode)
-          case _ => graphSFVA.addEdge(from, to)
+        if isSourceOrSinkNode then
+          graphSFVA.addEdge(from, pivotCallerNode)
+        else
+          graphSFVA.addEdgeOpenCS(from, to)
       })
     })
   }

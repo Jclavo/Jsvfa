@@ -15,6 +15,10 @@ class GraphSFVA {
 
   def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.addOne(source ~> target % 0.0)
 
+  def addEdgeOpenCS(source: NodeSVFA, target: NodeSVFA): Unit = graph.addOne(source ~> target % 1.0)
+
+  def addEdgeCloseCS(source: NodeSVFA, target: NodeSVFA): Unit = graph.addOne(source ~> target % -1.0)
+
   def getNodes: Set[NodeSVFA] = graph.nodes.map(n => n.outer).toSet
 
   def exportToDot(): String = {
@@ -27,7 +31,10 @@ class GraphSFVA {
       Doc.space +
       Doc.text("\"") +
       Doc.text(edge._2.show()) +
-      Doc.text("\"")
+      Doc.text("\"") +
+      Doc.space +
+      Doc.text(getNodeLabel(edge)) +
+      Doc.space
     }
 
     val colorNodes = graph.nodes.map { node =>
@@ -45,6 +52,12 @@ class GraphSFVA {
     val res = body.tightBracketBy(prefix, suffix)
     res.render(20)
   }
+
+  def getNodeLabel(edge: WDiEdge[NodeSVFA]): String = edge.weight match
+    case -1 => "[ label=\")CS\" ]"
+    case 1 => "[ label=\"CS(\" ]"
+    case _ => ""
+
 
   private def getColorForNode(node: NodeSVFA): String = node match
     case SourceNode(_, _) => "blue"
