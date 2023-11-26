@@ -29,6 +29,83 @@ class BasicsTest extends AnyFunSuite:
     )
 
     jsvfa.run()
-
     assert(jsvfa.graphSFVA.getAmountOfLeaks === 3)
+  }
+
+  test("function_call_1") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall1",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
+  }
+
+  test("function_call_2") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall2",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
+  }
+
+  test("function_call_3") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall3",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
+  }
+
+  test("function_call_4") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall4",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
+  }
+
+  test("function_call_5") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall5",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
+  }
+
+  test("function_call_6") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall6",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 0)
   }
