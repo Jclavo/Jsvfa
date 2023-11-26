@@ -8,7 +8,7 @@ class StmtTypeTest extends AnyFunSuite:
   test("method_has_source_stmt") {
 
     val jsvfa = JSVFATest(
-      "samples.JSVFA.cases.basic.simpleLeak",
+      "samples.JSVFA.cases.basic.SimpleLeak",
       "main",
       "void",
       "src/test/java/samples/JSVFA/cases/basic"
@@ -22,7 +22,7 @@ class StmtTypeTest extends AnyFunSuite:
   test("method_has_sink_stmt") {
 
     val jsvfa = JSVFATest(
-      "samples.JSVFA.cases.basic.simpleLeak",
+      "samples.JSVFA.cases.basic.SimpleLeak",
       "main",
       "void",
       "src/test/java/samples/JSVFA/cases/basic"
