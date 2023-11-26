@@ -7,8 +7,8 @@ class BasicsTest extends AnyFunSuite:
 
   test("simple_source_and_sink") {
 
-     val jsvfa = JSVFATest(
-      "samples.JSVFA.cases.basic.simpleLeak",
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.SimpleLeak",
       "main",
       "void",
       "src/test/java/samples/JSVFA/cases/basic"
@@ -18,3 +18,17 @@ class BasicsTest extends AnyFunSuite:
 
     assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
   }
+
+//  test("complex_source_and_sink") {
+//
+//    val jsvfa = JSVFATest(
+//      "samples.JSVFA.cases.basic.simpleLeak",
+//      "main",
+//      "void",
+//      "src/test/java/samples/JSVFA/cases/basic"
+//    )
+//
+//    jsvfa.run()
+//
+//    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
+//  }

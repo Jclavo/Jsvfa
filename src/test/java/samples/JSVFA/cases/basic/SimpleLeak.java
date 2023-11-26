@@ -1,6 +1,6 @@
 package samples.JSVFA.cases.basic;
 
-public class simpleLeak {
+public class SimpleLeak {
 
     public void main(String[] var0)
     {
