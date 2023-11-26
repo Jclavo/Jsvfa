@@ -1,18 +1,19 @@
 package br.unb.cic
 
 import br.unb.cic.syntax.NodeSVFA.{SinkNode, SourceNode}
-import br.unb.cic.syntax.{NodeSVFA}
+import br.unb.cic.syntax.NodeSVFA
 import org.typelevel.paiges.Doc
-import scalax.collection.edges.{DiEdge, DiEdgeImplicits}
+import scalax.collection.edges.labeled.{WDiEdge, WDiEdgeFactory}
+import scalax.collection.edges.DiEdgeImplicits
 import scalax.collection.mutable.Graph
 
 class GraphSFVA {
 
-  val graph = Graph.empty[NodeSVFA, DiEdge[NodeSVFA]]
+  val graph = Graph.empty[NodeSVFA, WDiEdge[NodeSVFA]] // CASE 4
 
   def addNode(node: NodeSVFA): Unit = graph.add(node)
 
-  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.add(source ~> target)
+  def addEdge(source: NodeSVFA, target: NodeSVFA): Unit = graph.addOne(source ~> target % 0.0)
 
   def getNodes: Set[NodeSVFA] = graph.nodes.map(n => n.outer).toSet
 
