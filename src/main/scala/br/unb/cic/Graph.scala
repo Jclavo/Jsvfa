@@ -90,11 +90,26 @@ class GraphSFVA {
     var amountOfLeaks: Int = 0
     getSourceNodes.foreach(sourceNode => {
       getSinkNodes.foreach(sinkNode => {
-        if graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
+        if isPathValid(sourceNode, sinkNode) then
           amountOfLeaks = amountOfLeaks + 1
       })
     })
     amountOfLeaks
+  }
+
+  private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
+    graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined
+//    if ! graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
+//      return false
+//
+//    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
+//    path.edges.foreach(edge => {
+////      println(edge.weight)
+////        if edge.weight == 1 then
+////           edge.
+//    })
+//    println("--------------------")
+//    true
   }
 }
 
