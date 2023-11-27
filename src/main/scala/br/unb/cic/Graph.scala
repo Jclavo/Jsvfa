@@ -98,18 +98,34 @@ class GraphSFVA {
   }
 
   private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
-    graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined
-//    if ! graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
-//      return false
-//
-//    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
-//    path.edges.foreach(edge => {
-////      println(edge.weight)
-////        if edge.weight == 1 then
-////           edge.
-//    })
-//    println("--------------------")
-//    true
+    if ! graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
+      return false
+
+    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
+    var csList: List[GraphSFVA.this.graph.EdgeT] = List()
+    var isValidPath: Boolean = true
+
+    path.edges.foreach(edge => {
+      if (edge.weight == -1 || edge.weight == 1) {
+        if (csList.isEmpty) {
+          csList = csList :+ edge
+        }
+        else {
+          val lastElement = csList.reverse.head
+          if (lastElement.weight == edge.weight) {
+            csList = csList :+ edge
+          }
+          else {
+            if (lastElement.outer.source.getStmtLine() == edge.outer.source.getStmtLine()) {
+              csList = csList.reverse.tail.reverse
+            } else {
+              isValidPath = false
+            }
+          }
+        }
+      }
+    })
+    isValidPath
   }
 }
 
