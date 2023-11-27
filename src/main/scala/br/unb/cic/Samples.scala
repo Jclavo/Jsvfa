@@ -24,7 +24,7 @@ def main(): Unit = {
 
 def showMethodMain(className: String, sourcePath: String = null): Unit = {
 
-  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/scala/br/unb/cic/sootup/resources")
+  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/java/samples")
 
   // Specify the language of the JavaProject.
   val language = new JavaLanguage(8)
@@ -33,7 +33,7 @@ def showMethodMain(className: String, sourcePath: String = null): Unit = {
   val project = JavaProject.builder(language).addInputLocation(inputLocation).build()
 
   // Create a signature for the class we want to analyze
-  val classType = project.getIdentifierFactory().getClassType(s"br.unb.cic.sootup.resources.$className")
+  val classType = project.getIdentifierFactory().getClassType(s"samples.$className")
 
   // Create a signature for the method we want to analyze// Create a signature for the method we want to analyze
   val methodSignature = project.getIdentifierFactory.getMethodSignature(classType, "main", "void", Collections.singletonList("java.lang.String[]"))
@@ -53,7 +53,7 @@ def showMethodMain(className: String, sourcePath: String = null): Unit = {
 //SootClass[Any]
 def showMethodsFromClass(className: String, sourcePath: String = null): Any = {
 
-  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/scala/br/unb/cic/sootup/resources")
+  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/java/samples")
 
   // Specify the language of the JavaProject.
   val language = new JavaLanguage(8)
@@ -62,7 +62,7 @@ def showMethodsFromClass(className: String, sourcePath: String = null): Any = {
   val project = JavaProject.builder(language).addInputLocation(inputLocation).build()
 
   // Create a signature for the class we want to analyze
-  val classType = project.getIdentifierFactory().getClassType(s"br.unb.cic.sootup.resources.$className")
+  val classType = project.getIdentifierFactory().getClassType(s"samples.$className")
 
   // Create a view for project, which allows us to retrieve classes
   val view = project.createView()
@@ -87,7 +87,7 @@ def traverse(method: SootMethod): Unit = {
 // CHA
 def showGraphByClassHierarchyAnalysis(className: String, sourcePath: String = null): Any = {
 
-  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/scala/br/unb/cic/sootup/resources")
+  val inputLocation = new JavaSourcePathAnalysisInputLocation("src/test/java/samples")
 
   // Specify the language of the JavaProject.
   val language = new JavaLanguage(8)
@@ -98,7 +98,7 @@ def showGraphByClassHierarchyAnalysis(className: String, sourcePath: String = nu
                 .build()
 
   // Create a signature for the class we want to analyze
-  val classType = project.getIdentifierFactory().getClassType(s"br.unb.cic.sootup.resources.$className")
+  val classType = project.getIdentifierFactory().getClassType(s"samples.$className")
 
   // Create a signature for the method we want to analyze// Create a signature for the method we want to analyze
   val methodSignature = project.getIdentifierFactory.getMethodSignature(classType, "main", "void", Collections.singletonList("java.lang.String[]"))

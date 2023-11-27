@@ -1,38 +1,64 @@
 package br.unb.cic.sootup.rules
 
-import br.unb.cic.JSVFA
+import br.unb.cic.sootup.JSVFATest
 import org.scalatest.funsuite.AnyFunSuite
 
 class RuleCopyTest extends AnyFunSuite:
 
   test("variable_simple_assignment") {
-    val jsvfa = JSVFA()
-    jsvfa.run("SimpleVariableAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.rules.SimpleVariableAssignment",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/rules"
+    )
+
+    jsvfa.run()
   //    println(jsvfa.graphSFVA.exportToDot())
     assert(jsvfa.graphSFVA.edgesTotal() === 3)
   }
 
    test("variable_complex_assignment") {
-     val jsvfa = JSVFA()
-     jsvfa.run("ComplexVariableAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
+
+     val jsvfa = JSVFATest(
+       "samples.JSVFA.rules.SimpleVariableAssignment",
+       "main",
+       "void",
+       "src/test/java/samples/JSVFA/rules"
+     )
+     jsvfa.run()
+
      assert(jsvfa.graphSFVA.edgesTotal() === 3)
    }
 
   test("variable_full_assignment") {
-    val jsvfa = JSVFA()
-    jsvfa.run("FullVariableAssignment", "src/test/scala/br/unb/cic/sootup/resources/JSVFA/rules", "br.unb.cic.sootup.resources.JSVFA.rules")
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.rules.FullVariableAssignment",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/rules"
+    )
+    jsvfa.run()
+
     assert(jsvfa.graphSFVA.edgesTotal() === 9)
   }
 
   test("calculator_simple") {
-    val jsvfa = JSVFA()
-    jsvfa.run("CalculatorSimple", "src/test/scala/br/unb/cic/sootup/resources/basic", "br.unb.cic.sootup.resources.basic")
+    val jsvfa = JSVFATest(
+      "samples.basic.CalculatorSimple",
+      "main",
+      "void",
+      "src/test/java/samples/basic"
+    )
+    jsvfa.run()
+
     assert(jsvfa.graphSFVA.edgesTotal() === 8)
   }
 
 //  test("NumberSign") {
 //    val jsvfa = JSVFA()
-//    jsvfa.run("NumberSign", "src/test/scala/br/unb/cic/sootup/resources/basic", "br.unb.cic.sootup.resources.basic")
+//    jsvfa.run("NumberSign", "src/test/java/samples/basic", "samples.basic")
 //    println(jsvfa.graphSFVA.exportToDot())
 //    assert(jsvfa.graphSFVA.edgesTotal() === 3)
 //  }

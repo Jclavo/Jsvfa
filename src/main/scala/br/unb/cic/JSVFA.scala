@@ -14,45 +14,26 @@ import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
 import br.unb.cic.syntax.StmtSVFA.*
-import br.unb.cic.syntax.EdgeSVFA.*
-import br.unb.cic.syntax.{NodeSVFA, StmtSVFA}
+import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
+import sootup.core.views.View
 
 import java.util.Collections
 
-class JSVFA {
+abstract class JSVFA extends SVFABase with SourceAndSink {
 
   var graphSFVA = new GraphSFVA()
 
-  private var view: JavaView = null
-
   private var methodsVisited: Set[String] = Set()
 
-  def run(className: String, pathTestFile: String, pathPackage: String): Unit = {
+  override def run(): Unit = {
+      val project = createProject()
+      val view = createView(project)
 
-    val inputLocation = new JavaSourcePathAnalysisInputLocation(pathTestFile)
-
-    // Specify the language of the JavaProject.
-    val language = new JavaLanguage(8)
-
-    // Create a new JavaProject based on the input location
-    val project = JavaProject.builder(language).addInputLocation(inputLocation).build()
-
-    // Create a signature for the class we want to analyze
-    val classType = project.getIdentifierFactory().getClassType(s"$pathPackage.$className")
-
-    // Create a view for project, which allows us to retrieve classes
-    view = project.createView()
-
-    // Retrieve class
-    val sootClass = view.getClass(classType).get()
-
-    sootClass.getMethods().forEach(method => {
-      traverse(method)
-    })
+      traverse(view, getEntryPoint(project, view))
   }
 
-  def traverse(method: SootMethod): Unit = {
+  def traverse(view: View[?], method: SootMethod): Unit = {
     val body = method.getBody
     val stmtGraph = body.getStmtGraph()
     val methodName = method.getName
@@ -66,35 +47,36 @@ class JSVFA {
 //    println(methodName + "\n" + method.getBody())
 
     body.getStmts().forEach(stmt => {
-      analyzer(stmt, method, stmtGraph)
+      analyzer(view, stmt, method, stmtGraph)
     })
   }
 
-  private def analyzer(stmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+  private def analyzer(view: View[?], stmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+
       val stmtSVFA = StmtSVFA.convert(stmt)
 
       stmtSVFA match
-        case AssignmentStmt(s) => AnalyzerAssignments(AssignmentStmt(s), method, stmtGraph) // a = *
-        case InvokeStmt(s) => AnalyzerInvokes(InvokeStmt(s), method, stmtGraph) // *.myFunction(...)
+        case AssignmentStmt(s) => AnalyzerAssignments(view, AssignmentStmt(s), method, stmtGraph) // a = *
+        case InvokeStmt(s) => AnalyzerInvokes(view, InvokeStmt(s), method, stmtGraph) // *.myFunction(...)
         case _ =>
   }
 
-  private def AnalyzerAssignments(assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+  private def AnalyzerAssignments(view: View[?], assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     val leftOp = assignmentStmt.stmt.getLeftOp
     val rightOp = assignmentStmt.stmt.getRightOp
 
     (leftOp, rightOp) match
-      case (_: Local, r: AbstractInvokeExpr) =>  AnalyzerInvokes(r, assignmentStmt.stmt, method, stmtGraph)
+      case (_: Local, r: AbstractInvokeExpr) =>  AnalyzerInvokes(view, r, assignmentStmt.stmt, method, stmtGraph)
       case (_: Local, r: Local) => ruleCopy(r, assignmentStmt, method, stmtGraph) // a = b
       case (_: Local, _) => ruleCopyExpression(assignmentStmt, method, stmtGraph) // a = b + c
       case (_, _) =>
   }
 
-  private def AnalyzerInvokes(invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
-    AnalyzerInvokes(invokeStmt.stmt.getInvokeExpr, invokeStmt.stmt, method, stmtGraph)
+  private def AnalyzerInvokes(view: View[?], invokeStmt: InvokeStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+    AnalyzerInvokes(view, invokeStmt.stmt.getInvokeExpr, invokeStmt.stmt, method, stmtGraph)
   }
 
-  private def AnalyzerInvokes(invokeExp: AbstractInvokeExpr, invokeStmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
+  private def AnalyzerInvokes(view: View[?], invokeExp: AbstractInvokeExpr, invokeStmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     //    println(invokeStmt.stmt.getInvokeExpr.getMethodSignature.getDeclClassType)
 
     if (! view.getMethod(invokeExp.getMethodSignature).isPresent) {
@@ -103,6 +85,15 @@ class JSVFA {
 
     val calleeMethod = view.getMethod(invokeExp.getMethodSignature).get()
     val calleeBody = calleeMethod.getBody
+
+    /**
+     * if it is source or sink stmt
+     * any of them wont be explored
+     */
+      if (isSourceOrSinkStatement(invokeStmt)) {
+        defsToParameters(invokeStmt, method, calleeMethod, true)
+        return
+      }
 
     /**
      * creating nodes from caller to callee
@@ -117,7 +108,7 @@ class JSVFA {
     // 3. create edge to "return"
     defsToReturn(invokeStmt, method, calleeMethod)
 
-    traverse(calleeMethod)
+    traverse(view, calleeMethod)
   }
 
   /**
@@ -159,9 +150,8 @@ class JSVFA {
         val opLocal = rValue.asInstanceOf[Local]
 
         opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
-          val from = NodeSVFA.SimpleNode(calleeMethod, d)
-          val to = NodeSVFA.SimpleNode(calleeMethod, r)
-//          graphSFVA.addEdge(SimpleEdge(from, to))
+          val from = createNode(calleeMethod, d)
+          val to = createNode(calleeMethod, r)
           graphSFVA.addEdge(from, to)
         })
       }
@@ -173,10 +163,9 @@ class JSVFA {
        * but I am not sure if creating it when it is an Invoke
        */
       if (invokeStmt.isInstanceOf[JAssignStmt[?, ?]]) {
-        val from = NodeSVFA.SimpleNode(calleeMethod, r)
-        val to = NodeSVFA.SimpleNode(callerMethod, invokeStmt)
-//        graphSFVA.add(SimpleEdge(from, to))
-        graphSFVA.addEdge(from, to)
+        val from = createNode(calleeMethod, r)
+        val to = createNode(callerMethod, invokeStmt)
+        graphSFVA.addEdgeCloseCS(from, to)
       }
     })
   }
@@ -190,7 +179,7 @@ class JSVFA {
    *  - this.myFunction(a, b)   | - caller:a@s' -> callee:a@s
    *                            | - caller:b@s' -> callee:b@s
    */
-  private def defsToParameters(invokeStmt: Stmt, callerMethod: SootMethod, calleeMethod: SootMethod): Unit = {
+  private def defsToParameters(invokeStmt: Stmt, callerMethod: SootMethod, calleeMethod: SootMethod, isSourceOrSinkNode: Boolean = false): Unit = {
     val callerStmt = invokeStmt
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
@@ -202,11 +191,21 @@ class JSVFA {
         return
       }
 
+      val pivotCallerNode = createNode(callerMethod, invokeStmt)
+
       parameterLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
-        val from = NodeSVFA.SimpleNode(callerMethod, d)
-        val to = NodeSVFA.SimpleNode(calleeMethod, parameterDeclarationStmt.get)
-//        graphSFVA.add(SimpleEdge(from, to))
-        graphSFVA.addEdge(from, to)
+
+        val from = createNode(callerMethod, d)
+        val to = createNode(calleeMethod, parameterDeclarationStmt.get)
+
+        /**
+         * check if it is source or sink node
+         * to select which nodes will be connected
+         */
+        if isSourceOrSinkNode then
+          graphSFVA.addEdge(from, pivotCallerNode)
+        else
+          graphSFVA.addEdgeOpenCS(from, to)
       })
     })
   }
@@ -226,9 +225,8 @@ class JSVFA {
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
     invokeLocal.getDefsForLocalUse(callerStmtGraph, callerStmt).forEach(d => {
-      val from = NodeSVFA.SimpleNode(callerMethod, d)
-      val to = NodeSVFA.SimpleNode(calleeMethod, calleeMethod.getBody.getThisStmt)
-//      graphSFVA.add(SimpleEdge(from, to))
+      val from = createNode(callerMethod, d)
+      val to = createNode(calleeMethod, calleeMethod.getBody.getThisStmt)
       graphSFVA.addEdge(from, to)
     })
   }
@@ -242,9 +240,8 @@ class JSVFA {
    */
   private def ruleCopy(rightLocal: Local, assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     rightLocal.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
-        val from = NodeSVFA.SimpleNode(method, d)
-        val to = NodeSVFA.SimpleNode(method, assignmentStmt.stmt)
-//        graphSFVA.add(SimpleEdge(from, to))
+        val from = createNode(method, d)
+        val to = createNode(method, assignmentStmt.stmt)
       graphSFVA.addEdge(from, to)
     })
   }
@@ -307,6 +304,12 @@ class JSVFA {
     })
     returnStmts
   }
+
+  private def createNode(method: SootMethod, stmt: Stmt): NodeSVFA = isSourceStmt(stmt) match
+    case true => NodeSVFA.SourceNode(method, stmt)
+    case _ => isSinkStmt(stmt) match
+      case true => NodeSVFA.SinkNode(method, stmt)
+      case _ => NodeSVFA.SimpleNode(method, stmt)
 }
 
 

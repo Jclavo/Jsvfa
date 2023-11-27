@@ -8,7 +8,6 @@ enum NodeSVFA(method: SootMethod, stmt: Stmt):
   
   def show(): String = s"${method.getDeclaringClassType.toString}\n<${method.getName}>\n${stmt.toString.replaceAll("\"", "'")}\nline:${stmt.getPositionInfo().getStmtPosition().getFirstLine()}"
 
-
   case SimpleNode(method: SootMethod, stmt: Stmt) extends NodeSVFA(method, stmt)
   case SourceNode(method: SootMethod, stmt: Stmt) extends NodeSVFA(method, stmt)
   case SinkNode(method: SootMethod, stmt: Stmt) extends NodeSVFA(method, stmt)

@@ -1,6 +1,7 @@
 package br.unb.cic.syntax
 
 import br.unb.cic.syntax.StmtSVFA
+import sootup.core.jimple.common.expr.AbstractInvokeExpr
 import sootup.core.jimple.common.stmt.{JAssignStmt, JInvokeStmt, Stmt}
 
 enum StmtSVFA(stmt: Stmt):
