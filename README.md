@@ -12,9 +12,10 @@ In this study the next implementations must be done:
     - [X] Copy
     - [ ] Load
     - [ ] Store
-    - [X] Call
+    - [X] Call & Return
+    - [ ] Array*
 - [X] Graph
-- [ ] Value Flow
+- [X] Value Flow
 - [ ] Flowdroid benchmark 
 
 # Dependencies
@@ -25,3 +26,6 @@ In this study the next implementations must be done:
 
 # Author
 José Clavo Tafur
+
+# Timeline
+The proposal dates to finish the project can be found at [Project's timeline](https://github.com/users/Jclavo/projects/1)
