@@ -110,7 +110,7 @@ class BasicsTest extends AnyFunSuite:
     assert(jsvfa.graphSFVA.getAmountOfLeaks === 0)
   }
 
-  ignore("function_call_7") {
+  test("function_call_7") {
 
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall7",
