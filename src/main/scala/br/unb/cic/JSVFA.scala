@@ -205,7 +205,8 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
         if isSourceOrSinkNode then
           graphSFVA.addEdge(from, pivotCallerNode)
         else
-          graphSFVA.addEdgeOpenCS(from, to)
+          graphSFVA.addEdgeOpenCS(from, pivotCallerNode)
+          graphSFVA.addEdge(pivotCallerNode, to)
       })
     })
   }
