@@ -7,6 +7,7 @@ import scalax.collection.edges.labeled.{WDiEdge, WDiEdgeFactory}
 import scalax.collection.edges.DiEdgeImplicits
 import scalax.collection.mutable.Graph
 
+
 class GraphSFVA {
 
   val graph = Graph.empty[NodeSVFA, WDiEdge[NodeSVFA]] // CASE 4
@@ -97,14 +98,93 @@ class GraphSFVA {
     amountOfLeaks
   }
 
-  private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
-    if ! graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
-      return false
+//  private def findPaths(source: NodeSVFA, target: NodeSVFA, visited: List[NodeSVFA],
+//                        currentPath: graph.PathBuilder, paths: List[graph.Path]): Set[graph.Path] = {
+//
+//    var res: Set[graph.Path] = Set()
+//
+//    val adjacencyList = graph.get(source).diSuccessors
+//
+//    if (adjacencyList.contains(graph.get(target))) {
+//      currentPath += graph.get(target)
+//      return Set(currentPath.result)
+//    } else {
+//      val newVisited = source :: visited
+//      adjacencyList.foreach(next => {
+//        if (newVisited.filter(p => p == next).size < 2) {
+//          val nextPath = currentPath
+//          nextPath += graph.get(next)
+//          return findPaths(next, target, newVisited, nextPath, paths)
+//        }
+//      })
+//    }
+//    res
+//  }
 
-    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
+//  def path(from: Node, to: Node, cfg: Graph, visited: List[Node], limit: Int): Set[Path] = {
+//    var res: Set[Path] = if (from == to) Set(List(from)) else Set()
+//
+//    val newVisited = from :: visited
+//
+//    for((n, t) <- cfg if (n == from) && (newVisited.filter(p => p == t).size < limit)) {
+//      res = res ++ path(t, to, cfg, newVisited, limit).map(path => from :: path)
+//    }
+//    res
+//  }
+
+//  def findPaths(source: NodeSVFA, sink: NodeSVFA, visited: List[NodeSVFA], limit: Int): Set[graph.PathBuilder] = {
+//
+//    var res: Set[graph.PathBuilder] = if (source == sink) Set(graph.newPathBuilder(graph.get(source))) else Set()
+//
+//    val newVisited = source :: visited // add element in the list
+//
+//    // add elements from another sequence : val s4 = s3 ++ List(6, 7) => Set(5, 1, 6, 2, 7, 3, 4)
+//    // add one element: set += 4 => Set(1, 2, 3, 4)
+//    graph.get(source).diSuccessors.map(ds => ds.outer).foreach(successor => {
+//      if (newVisited.filter(p => p == successor).size < limit) {
+//        res = res ++ findPaths(successor, sink, newVisited, limit).map(path => path += graph.get(source))
+//      }
+//    })
+//    res
+//  }
+
+  def findPaths(source: NodeSVFA, sink: NodeSVFA, visited: List[NodeSVFA], limit: Int): Set[graph.PathBuilder] = {
+
+    var res: Set[graph.PathBuilder] = Set()
+
+    if (source == sink) {
+      res = Set(graph.newPathBuilder(graph.get(source)))
+    }
+    else {
+      val newVisited = source :: visited // add element in the list
+
+      // add elements from another sequence : val s4 = s3 ++ List(6, 7) => Set(5, 1, 6, 2, 7, 3, 4)
+      // add one element: set += 4 => Set(1, 2, 3, 4)
+      graph.get(source).diSuccessors.map(ds => ds.outer).foreach(successor => {
+        if (newVisited.filter(p => p == successor).size < limit) {
+          res = res ++ findPaths(successor, sink, newVisited, limit).map(path => path += graph.get(source))
+        }
+      })
+    }
+    res
+  }
+
+  private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
+//    if graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
+//      return false
+//
+//    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
+    val pathBuilder = graph.newPathBuilder(graph.get(sourceNode))
+    val paths = findPaths(sourceNode, sinkNode, List(), 1)
+//    println(s"paths: ${paths.size}")
+    paths.filter(path => isPathValid(sourceNode, sinkNode, path.result())).size > 0
+  }
+
+  private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA, path: graph.Path): Boolean = {
     var csList: List[GraphSFVA.this.graph.EdgeT] = List()
     var isValidPath: Boolean = true
-
+    println(s"path: ${path}")
+    println("--------------")
     path.edges.foreach(edge => {
       if (edge.weight == -1 || edge.weight == 1) {
         if (csList.isEmpty) {
@@ -113,19 +193,41 @@ class GraphSFVA {
         else {
           val lastElement = csList.reverse.head
           if (lastElement.weight == edge.weight) {
-            csList = csList :+ edge
+
+//            if (lastElement.outer.target.getStmt() == edge.target.getStmt()) {
+//              isValidPath = false
+//            } else {
+              csList = csList :+ edge
+//            }
           }
           else {
             if (lastElement.outer.source.getStmtLine() == edge.outer.source.getStmtLine()) {
               csList = csList.reverse.tail.reverse
             } else {
+              csList = csList :+ edge
               isValidPath = false
             }
           }
         }
       }
     })
-    isValidPath
+
+    if (csList.isEmpty || ! isValidPath) {
+      return isValidPath
+    }
+    val lastElement = csList.reverse.head
+
+    if (lastElement.weight == 1) {
+      if (lastElement.outer.target.getMethodName() == sinkNode.getMethodName()) {
+        return false
+      }
+      true
+    } else {
+      if (lastElement.outer.source.getMethodName() == sinkNode.getMethodName()) {
+        return false
+      }
+      true
+    }
   }
 }
 
