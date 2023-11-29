@@ -170,25 +170,22 @@ class GraphSFVA {
   }
 
   def findPaths1(source: NodeSVFA, sink: NodeSVFA): Unit = {
-    findPaths1(source, sink, graph.newPathBuilder(graph.get(source)))
+    findPaths1(source, sink, List(source))
   }
 
-  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: graph.PathBuilder): Unit = {
-
+  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA]): Unit = {
 //      println(currentPath.result().edges.size)
       val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
 
       if (source == sink || diSuccessors.size == 0) {
-        println(currentPath.result().edges.size)
-        println(currentPath.result())
+        println(currentPath.size)
+        println(currentPath)
         return
       }
 
-
       diSuccessors.foreach(successor => {
-        val x = currentPath
-        x += graph.get(successor)
-        findPaths1(successor, sink, x)
+        val newCurrentPath = successor :: currentPath
+        findPaths1(successor, sink, newCurrentPath)
       })
 
   }
