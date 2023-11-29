@@ -169,6 +169,30 @@ class GraphSFVA {
     res
   }
 
+  def findPaths1(source: NodeSVFA, sink: NodeSVFA): Unit = {
+    findPaths1(source, sink, graph.newPathBuilder(graph.get(source)))
+  }
+
+  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: graph.PathBuilder): Unit = {
+
+//      println(currentPath.result().edges.size)
+      val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
+
+      if (source == sink || diSuccessors.size == 0) {
+        println(currentPath.result().edges.size)
+        println(currentPath.result())
+        return
+      }
+
+
+      diSuccessors.foreach(successor => {
+        val x = currentPath
+        x += graph.get(successor)
+        findPaths1(successor, sink, x)
+      })
+
+  }
+
   private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
 //    val p = graph.get(sourceNode).pathTo(graph.get(sinkNode))
 //    if (p.isDefined  && isPathValid(sourceNode, sinkNode, p.get)) {
