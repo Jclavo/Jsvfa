@@ -169,28 +169,24 @@ class GraphSFVA {
     res
   }
 
-  def findPaths1(source: NodeSVFA, sink: NodeSVFA): Unit = {
+  def findPaths1(source: NodeSVFA, sink: NodeSVFA): List[NodeSVFA] = {
     findPaths1(source, sink, List(source))
   }
 
-  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA]): Unit = {
-//      println(currentPath.result().edges.size)
-      val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
+  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA]): List[NodeSVFA] = {
 
-      if (source == sink || diSuccessors.size == 0) {
-//        val path = convertToPath(currentPath).result()
-//        println(path.edges.size)
-//        println(path)
-        println(currentPath.size)
-        println(currentPath)
-        println("--------------------")
-        return
-      }
+    val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
+    var finalPath: List[NodeSVFA] = List()
 
+    if (source == sink || diSuccessors.size == 0) {
+      finalPath = currentPath
+    } else {
       diSuccessors.foreach(successor => {
         val newCurrentPath = successor :: currentPath
-        findPaths1(successor, sink, newCurrentPath)
+        finalPath = findPaths1(successor, sink, newCurrentPath)
       })
+    }
+    finalPath
   }
 
   private def convertToPath(path: List[NodeSVFA]): graph.PathBuilder = {
