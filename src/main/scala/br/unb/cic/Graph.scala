@@ -170,8 +170,10 @@ class GraphSFVA {
   }
 
   private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
-//    if graph.get(sourceNode).pathTo(graph.get(sinkNode)).isDefined then
-//      return false
+//    val p = graph.get(sourceNode).pathTo(graph.get(sinkNode))
+//    if (p.isDefined  && isPathValid(sourceNode, sinkNode, p.get)) {
+//      return true
+//    }
 //
 //    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
     val pathBuilder = graph.newPathBuilder(graph.get(sourceNode))
@@ -185,6 +187,9 @@ class GraphSFVA {
     var isValidPath: Boolean = true
     println(s"path: ${path}")
     println("--------------")
+//    if  (path.edges.size <=1) {
+//      return false
+//    }
     path.edges.foreach(edge => {
       if (edge.weight == -1 || edge.weight == 1) {
         if (csList.isEmpty) {
