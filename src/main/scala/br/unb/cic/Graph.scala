@@ -170,10 +170,10 @@ class GraphSFVA {
   }
 
   def findPaths1(source: NodeSVFA, sink: NodeSVFA): Set[List[NodeSVFA]] = {
-    findPaths1(source, sink, List(source))
+    findPaths1(source, sink, List(source), List())
   }
 
-  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA]): Set[List[NodeSVFA]] = {
+  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA], visited: List[NodeSVFA]): Set[List[NodeSVFA]] = {
 
     val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
     var finalPath: Set[List[NodeSVFA]] = Set()
@@ -181,9 +181,13 @@ class GraphSFVA {
     if (source == sink || diSuccessors.size == 0) {
       finalPath = Set(currentPath)
     } else {
+      val newVisited = source :: visited
       diSuccessors.foreach(successor => {
-        val newCurrentPath = successor :: currentPath
-        finalPath = finalPath ++ findPaths1(successor, sink, newCurrentPath)
+        if (newVisited.filter(p => p == successor).size < 2) {
+          val newCurrentPath = successor :: currentPath
+          finalPath = finalPath ++ findPaths1(successor, sink, newCurrentPath, newVisited)
+        }
+
       })
     }
     finalPath
