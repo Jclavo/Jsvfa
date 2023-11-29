@@ -178,8 +178,12 @@ class GraphSFVA {
       val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
 
       if (source == sink || diSuccessors.size == 0) {
+//        val path = convertToPath(currentPath).result()
+//        println(path.edges.size)
+//        println(path)
         println(currentPath.size)
         println(currentPath)
+        println("--------------------")
         return
       }
 
@@ -187,7 +191,14 @@ class GraphSFVA {
         val newCurrentPath = successor :: currentPath
         findPaths1(successor, sink, newCurrentPath)
       })
+  }
 
+  private def convertToPath(path: List[NodeSVFA]): graph.PathBuilder = {
+    val p = graph.newPathBuilder(graph.get(path.reverse.head))
+    path.reverse.tail.foreach(t => {
+      p += graph.get(t)
+    })
+    p
   }
 
   private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
@@ -199,7 +210,6 @@ class GraphSFVA {
 //    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
     val pathBuilder = graph.newPathBuilder(graph.get(sourceNode))
     val paths = findPaths(sourceNode, sinkNode, List(), 1)
-//    println(s"paths: ${paths.size}")
     paths.filter(path => isPathValid(sourceNode, sinkNode, path.result())).size > 0
   }
 
