@@ -98,8 +98,8 @@ class GraphSFVA {
     amountOfLeaks
   }
 
-  def findPaths(source: NodeSVFA, sink: NodeSVFA): Set[List[NodeSVFA]] = {
-    findPaths(source, sink, List(source), List())
+  def findPaths(source: NodeSVFA, sink: NodeSVFA): Set[graph.Path] = {
+    findPaths(source, sink, List(source), List()).map(path => convertToPathBuilder(path))
   }
 
   def findPaths(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA], visited: List[NodeSVFA]): Set[List[NodeSVFA]] = {
@@ -122,12 +122,12 @@ class GraphSFVA {
     finalPath
   }
 
-  private def convertToPath(path: List[NodeSVFA]): graph.PathBuilder = {
+  private def convertToPathBuilder(path: List[NodeSVFA]): graph.Path = {
     val p = graph.newPathBuilder(graph.get(path.reverse.head))
     path.reverse.tail.foreach(t => {
       p += graph.get(t)
     })
-    p
+    p.result()
   }
 
   private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
