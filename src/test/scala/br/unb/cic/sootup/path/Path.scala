@@ -39,10 +39,11 @@ class Path extends AnyFunSuite:
 
     jsvfa.run()
 
-    val sourceNode = jsvfa.graphSFVA.getSourceNodes.head
-    val sinkNode = jsvfa.graphSFVA.getSinkNodes.head
+    val graphSFVA = jsvfa.graphSFVA
+    val sourceNode = graphSFVA.getSourceNodes.head
+    val sinkNode = graphSFVA.getSinkNodes.head
 
-    val paths = jsvfa.graphSFVA.findPaths(sourceNode, sinkNode)
+    val paths = graphSFVA.findPaths(sourceNode, sinkNode)
     assert(paths.size === 3)
   }
 
@@ -57,10 +58,11 @@ class Path extends AnyFunSuite:
 
     jsvfa.run()
 
-    val sourceNode = jsvfa.graphSFVA.getSourceNodes.head
-    val sinkNode = jsvfa.graphSFVA.getSinkNodes.head
+    val graphSFVA = jsvfa.graphSFVA
+    val sourceNode = graphSFVA.getSourceNodes.head
+    val sinkNode = graphSFVA.getSinkNodes.head
 
-    val paths = jsvfa.graphSFVA.findPaths(sourceNode, sinkNode)
+    val paths = graphSFVA.findPaths(sourceNode, sinkNode)
     assert(paths.size === 2)
   }
 
@@ -75,10 +77,11 @@ class Path extends AnyFunSuite:
 
     jsvfa.run()
 
-    val sourceNode = jsvfa.graphSFVA.getSourceNodes.head
-    val sinkNode = jsvfa.graphSFVA.getSinkNodes.head
+    val graphSFVA = jsvfa.graphSFVA
+    val sourceNode = graphSFVA.getSourceNodes.head
+    val sinkNode = graphSFVA.getSinkNodes.head
 
-    val paths = jsvfa.graphSFVA.findPaths(sourceNode, sinkNode)
+    val paths = graphSFVA.findPaths(sourceNode, sinkNode)
     assert(paths.size === 2)
   }
 
@@ -93,10 +96,11 @@ class Path extends AnyFunSuite:
 
     jsvfa.run()
 
-    val sourceNode = jsvfa.graphSFVA.getSourceNodes.head
-    val sinkNode = jsvfa.graphSFVA.getSinkNodes.head
-//    println(jsvfa.graphSFVA.exportToDot())
-    val paths = jsvfa.graphSFVA.findPaths(sourceNode, sinkNode)
+    val graphSFVA = jsvfa.graphSFVA
+    val sourceNode = graphSFVA.getSourceNodes.head
+    val sinkNode = graphSFVA.getSinkNodes.head
+
+    val paths = graphSFVA.findPaths(sourceNode, sinkNode)
     assert(paths.size === 10)
   }
 
@@ -111,9 +115,11 @@ class Path extends AnyFunSuite:
 
     jsvfa.run()
 
-    val sourceNode = jsvfa.graphSFVA.getSourceNodes.head
-    val sinkNode = jsvfa.graphSFVA.getSinkNodes.head
-    val paths = jsvfa.graphSFVA.findPaths(sourceNode, sinkNode)
+    val graphSFVA = jsvfa.graphSFVA
+    val sourceNode = graphSFVA.getSourceNodes.head
+    val sinkNode = graphSFVA.getSinkNodes.head
+
+    val paths = graphSFVA.findPaths(sourceNode, sinkNode)
     assert(paths.size === 6)
   }
 
@@ -128,8 +134,10 @@ class Path extends AnyFunSuite:
 
     jsvfa.run()
 
-    val sourceNode = jsvfa.graphSFVA.getSourceNodes.head
-    val sinkNode = jsvfa.graphSFVA.getSinkNodes.head
-    val paths = jsvfa.graphSFVA.findPaths(sourceNode, sinkNode)
+    val graphSFVA = jsvfa.graphSFVA
+    val sourceNode = graphSFVA.getSourceNodes.head
+    val sinkNode = graphSFVA.getSinkNodes.head
+
+    val paths = graphSFVA.findPaths(sourceNode, sinkNode)
     assert(paths.size === 1)
   }
