@@ -91,7 +91,7 @@ class GraphSFVA {
     var amountOfLeaks: Int = 0
     getSourceNodes.foreach(sourceNode => {
       getSinkNodes.foreach(sinkNode => {
-        if isPathValid(sourceNode, sinkNode) then
+        if hasValidPath(sourceNode, sinkNode) then
           amountOfLeaks = amountOfLeaks + 1
       })
     })
@@ -130,7 +130,7 @@ class GraphSFVA {
     p.result()
   }
 
-  private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
+  def hasValidPath(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
 //    val p = graph.get(sourceNode).pathTo(graph.get(sinkNode))
 //    if (p.isDefined  && isPathValid(sourceNode, sinkNode, p.get)) {
 //      return true
@@ -139,18 +139,17 @@ class GraphSFVA {
 //    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
     val pathBuilder = graph.newPathBuilder(graph.get(sourceNode))
     val paths = findPaths(sourceNode, sinkNode)
-//    paths.filter(path => isPathValid(sourceNode, sinkNode, path.result())).size > 0
-    true
+    paths.filter(path => isPathValid(sourceNode, sinkNode, path)).size > 0
   }
 
-  private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA, path: graph.Path): Boolean = {
+  def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA, path: graph.Path): Boolean = {
     var csList: List[GraphSFVA.this.graph.EdgeT] = List()
     var isValidPath: Boolean = true
-    println(s"path: ${path}")
-    println("--------------")
-//    if  (path.edges.size <=1) {
-//      return false
-//    }
+//    println(s"path: ${path}")
+//    println("--------------")
+    if  (path.edges.size <=1) {
+      return false
+    }
     path.edges.foreach(edge => {
       if (edge.weight == -1 || edge.weight == 1) {
         if (csList.isEmpty) {
