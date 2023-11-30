@@ -21,7 +21,8 @@ class Path extends AnyFunSuite:
 
     val paths = jsvfa.graphSFVA.findPaths(sourceNode, sinkNode)
 
-    assert(paths.head.size === 5)
+    assert(paths.size === 1)
+    assert(paths.head.size === 9)
 }
 
   test("path2") {
