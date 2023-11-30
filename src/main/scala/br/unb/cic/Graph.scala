@@ -98,82 +98,11 @@ class GraphSFVA {
     amountOfLeaks
   }
 
-//  private def findPaths(source: NodeSVFA, target: NodeSVFA, visited: List[NodeSVFA],
-//                        currentPath: graph.PathBuilder, paths: List[graph.Path]): Set[graph.Path] = {
-//
-//    var res: Set[graph.Path] = Set()
-//
-//    val adjacencyList = graph.get(source).diSuccessors
-//
-//    if (adjacencyList.contains(graph.get(target))) {
-//      currentPath += graph.get(target)
-//      return Set(currentPath.result)
-//    } else {
-//      val newVisited = source :: visited
-//      adjacencyList.foreach(next => {
-//        if (newVisited.filter(p => p == next).size < 2) {
-//          val nextPath = currentPath
-//          nextPath += graph.get(next)
-//          return findPaths(next, target, newVisited, nextPath, paths)
-//        }
-//      })
-//    }
-//    res
-//  }
-
-//  def path(from: Node, to: Node, cfg: Graph, visited: List[Node], limit: Int): Set[Path] = {
-//    var res: Set[Path] = if (from == to) Set(List(from)) else Set()
-//
-//    val newVisited = from :: visited
-//
-//    for((n, t) <- cfg if (n == from) && (newVisited.filter(p => p == t).size < limit)) {
-//      res = res ++ path(t, to, cfg, newVisited, limit).map(path => from :: path)
-//    }
-//    res
-//  }
-
-//  def findPaths(source: NodeSVFA, sink: NodeSVFA, visited: List[NodeSVFA], limit: Int): Set[graph.PathBuilder] = {
-//
-//    var res: Set[graph.PathBuilder] = if (source == sink) Set(graph.newPathBuilder(graph.get(source))) else Set()
-//
-//    val newVisited = source :: visited // add element in the list
-//
-//    // add elements from another sequence : val s4 = s3 ++ List(6, 7) => Set(5, 1, 6, 2, 7, 3, 4)
-//    // add one element: set += 4 => Set(1, 2, 3, 4)
-//    graph.get(source).diSuccessors.map(ds => ds.outer).foreach(successor => {
-//      if (newVisited.filter(p => p == successor).size < limit) {
-//        res = res ++ findPaths(successor, sink, newVisited, limit).map(path => path += graph.get(source))
-//      }
-//    })
-//    res
-//  }
-
-  def findPaths(source: NodeSVFA, sink: NodeSVFA, visited: List[NodeSVFA], limit: Int): Set[graph.PathBuilder] = {
-
-    var res: Set[graph.PathBuilder] = Set()
-
-    if (source == sink) {
-      res = Set(graph.newPathBuilder(graph.get(source)))
-    }
-    else {
-      val newVisited = source :: visited // add element in the list
-
-      // add elements from another sequence : val s4 = s3 ++ List(6, 7) => Set(5, 1, 6, 2, 7, 3, 4)
-      // add one element: set += 4 => Set(1, 2, 3, 4)
-      graph.get(source).diSuccessors.map(ds => ds.outer).foreach(successor => {
-        if (newVisited.filter(p => p == successor).size < limit) {
-          res = res ++ findPaths(successor, sink, newVisited, limit).map(path => path += graph.get(source))
-        }
-      })
-    }
-    res
+  def findPaths(source: NodeSVFA, sink: NodeSVFA): Set[List[NodeSVFA]] = {
+    findPaths(source, sink, List(source), List())
   }
 
-  def findPaths1(source: NodeSVFA, sink: NodeSVFA): Set[List[NodeSVFA]] = {
-    findPaths1(source, sink, List(source), List())
-  }
-
-  def findPaths1(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA], visited: List[NodeSVFA]): Set[List[NodeSVFA]] = {
+  def findPaths(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA], visited: List[NodeSVFA]): Set[List[NodeSVFA]] = {
 
     val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
     var finalPath: Set[List[NodeSVFA]] = Set()
@@ -185,7 +114,7 @@ class GraphSFVA {
       diSuccessors.foreach(successor => {
         if (newVisited.filter(p => p == successor).size < 2) {
           val newCurrentPath = successor :: currentPath
-          finalPath = finalPath ++ findPaths1(successor, sink, newCurrentPath, newVisited)
+          finalPath = finalPath ++ findPaths(successor, sink, newCurrentPath, newVisited)
         }
 
       })
@@ -209,8 +138,9 @@ class GraphSFVA {
 //
 //    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
     val pathBuilder = graph.newPathBuilder(graph.get(sourceNode))
-    val paths = findPaths(sourceNode, sinkNode, List(), 1)
-    paths.filter(path => isPathValid(sourceNode, sinkNode, path.result())).size > 0
+    val paths = findPaths(sourceNode, sinkNode)
+//    paths.filter(path => isPathValid(sourceNode, sinkNode, path.result())).size > 0
+    true
   }
 
   private def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA, path: graph.Path): Boolean = {
