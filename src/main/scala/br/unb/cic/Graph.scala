@@ -161,31 +161,42 @@ class GraphSFVA {
       return false
     }
 
-    path.foreach(edge => {
-      if (edge.weight == -1 || edge.weight == 1) {
-        if (csList.isEmpty) {
+    var deletedElement:graph.EdgeT = null
+    path.filter(e => e.weight != 0).foreach(edge => {
+        if (csList.isEmpty && deletedElement == null) {
           csList = csList :+ edge
         }
         else {
-          val lastElement = csList.reverse.head
+          var lastElement:graph.EdgeT = null
+          if (deletedElement != null) {
+            lastElement = deletedElement
+            deletedElement = null
+          } else {
+            lastElement = csList.reverse.head
+          }
+
           if (lastElement.weight == edge.weight) {
 
-//            if (lastElement.outer.target.getStmt() == edge.target.getStmt()) {
-//              isValidPath = false
-//            } else {
-              csList = csList :+ edge
-//            }
-          }
-          else {
-            if (lastElement.outer.target.getStmtLine() == edge.outer.target.getStmtLine()) {
-              csList = csList.reverse.tail.reverse
+            if (lastElement.outer.target.getMethodName() == edge.target.getMethodName()) {
+              isValidPath = false
             } else {
               csList = csList :+ edge
-              isValidPath = false
+            }
+          }
+          else {
+            if (csList.isEmpty) {
+              csList = csList :+ edge
+            } else {
+              lastElement = csList.reverse.head
+              if (lastElement.outer.target.getStmtLine() == edge.outer.target.getStmtLine()) {
+                csList = csList.reverse.tail.reverse
+                deletedElement = edge
+              } else {
+                isValidPath = false
+              }
             }
           }
         }
-      }
     })
 
     if (csList.isEmpty || ! isValidPath) {
@@ -199,10 +210,10 @@ class GraphSFVA {
       }
       true
     } else {
-      if (lastElement.outer.source.getMethodName() == sinkNode.getMethodName()) {
-        return false
+      if (lastElement.outer.target.getMethodName() == sinkNode.getMethodName()) {
+        return true
       }
-      true
+      false
     }
   }
 }
