@@ -7,6 +7,7 @@ import scalax.collection.edges.labeled.{WDiEdge, WDiEdgeFactory}
 import scalax.collection.edges.DiEdgeImplicits
 import scalax.collection.mutable.Graph
 
+//type SomeInts = List[Int]
 
 class GraphSFVA {
 
@@ -98,8 +99,8 @@ class GraphSFVA {
     amountOfLeaks
   }
 
-  def findPaths(source: NodeSVFA, sink: NodeSVFA): Set[graph.Path] = {
-    findPaths(source, sink, List(source), List()).map(path => convertToPathBuilder(path))
+  def findPaths(source: NodeSVFA, sink: NodeSVFA): Set[List[graph.EdgeT]] = {
+    findPaths(source, sink, List(source), List()).map(path => convertToGraphPath(path))
   }
 
   def findPaths(source: NodeSVFA, sink: NodeSVFA, currentPath: List[NodeSVFA], visited: List[NodeSVFA]): Set[List[NodeSVFA]] = {
@@ -122,12 +123,18 @@ class GraphSFVA {
     finalPath
   }
 
-  private def convertToPathBuilder(path: List[NodeSVFA]): graph.Path = {
-    val p = graph.newPathBuilder(graph.get(path.reverse.head))
-    path.reverse.tail.foreach(t => {
-      p += graph.get(t)
-    })
-    p.result()
+  private def convertToGraphPath(path: List[NodeSVFA]): List[graph.EdgeT] = {
+    var newPath: List[graph.EdgeT] = List()
+    var oldPath = path.reverse
+
+    while(oldPath.length > 1) {
+      val tempPath = graph.newPathBuilder(graph.get(oldPath.head))
+
+      tempPath.add(graph.get(oldPath.tail.head))
+      newPath = tempPath.result().edges.head :: newPath
+      oldPath = oldPath.tail
+    }
+    newPath
   }
 
   def hasValidPath(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
@@ -135,22 +142,20 @@ class GraphSFVA {
 //    if (p.isDefined  && isPathValid(sourceNode, sinkNode, p.get)) {
 //      return true
 //    }
-//
-//    val path = graph.get(sourceNode).pathTo(graph.get(sinkNode)).get
+
     val pathBuilder = graph.newPathBuilder(graph.get(sourceNode))
     val paths = findPaths(sourceNode, sinkNode)
     paths.filter(path => isPathValid(sourceNode, sinkNode, path)).size > 0
   }
 
-  def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA, path: graph.Path): Boolean = {
+  def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA, path: List[graph.EdgeT]): Boolean = {
     var csList: List[GraphSFVA.this.graph.EdgeT] = List()
     var isValidPath: Boolean = true
-//    println(s"path: ${path}")
-//    println("--------------")
-    if  (path.edges.size <=1) {
+
+    if  (path.size <=1) {
       return false
     }
-    path.edges.foreach(edge => {
+    path.foreach(edge => {
       if (edge.weight == -1 || edge.weight == 1) {
         if (csList.isEmpty) {
           csList = csList :+ edge
@@ -166,7 +171,7 @@ class GraphSFVA {
 //            }
           }
           else {
-            if (lastElement.outer.source.getStmtLine() == edge.outer.source.getStmtLine()) {
+            if (lastElement.outer.target.getStmtLine() == edge.outer.target.getStmtLine()) {
               csList = csList.reverse.tail.reverse
             } else {
               csList = csList :+ edge
