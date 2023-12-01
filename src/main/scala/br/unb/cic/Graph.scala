@@ -135,7 +135,7 @@ class GraphSFVA {
       }
       oldPath = oldPath.tail
     }
-    newPath
+    newPath.reverse
   }
 
   def hasValidPath(sourceNode: NodeSVFA, sinkNode: NodeSVFA): Boolean = {
@@ -156,6 +156,11 @@ class GraphSFVA {
     if  (path.size <=1) {
       return false
     }
+
+    if (path.head.outer.source != sourceNode || path.reverse.head.outer.target != sinkNode) {
+      return false
+    }
+
     path.foreach(edge => {
       if (edge.weight == -1 || edge.weight == 1) {
         if (csList.isEmpty) {
