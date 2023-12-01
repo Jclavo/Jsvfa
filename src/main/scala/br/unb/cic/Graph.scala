@@ -109,7 +109,7 @@ class GraphSFVA {
     var finalPath: Set[List[NodeSVFA]] = Set()
 
     if (source == sink || diSuccessors.size == 0) {
-      finalPath = Set(currentPath)
+      finalPath = Set(currentPath.reverse)
     } else {
       val newVisited = source :: visited
       diSuccessors.foreach(successor => {
@@ -125,13 +125,14 @@ class GraphSFVA {
 
   private def convertToGraphPath(path: List[NodeSVFA]): List[graph.EdgeT] = {
     var newPath: List[graph.EdgeT] = List()
-    var oldPath = path.reverse
+    var oldPath = path
 
     while(oldPath.length > 1) {
       val tempPath = graph.newPathBuilder(graph.get(oldPath.head))
 
-      tempPath.add(graph.get(oldPath.tail.head))
-      newPath = tempPath.result().edges.head :: newPath
+      if (tempPath.add(graph.get(oldPath.tail.head))) {
+        newPath = tempPath.result().edges.head :: newPath
+      }
       oldPath = oldPath.tail
     }
     newPath
