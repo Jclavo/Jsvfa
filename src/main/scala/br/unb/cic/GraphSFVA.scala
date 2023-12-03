@@ -11,7 +11,7 @@ import scalax.collection.mutable.Graph
 
 class GraphSFVA {
 
-  val graph = Graph.empty[NodeSVFA, WDiEdge[NodeSVFA]] // CASE 4
+  val graph: Graph[NodeSVFA, WDiEdge[NodeSVFA]] = Graph.empty[NodeSVFA, WDiEdge[NodeSVFA]] // CASE 4
 
   def addNode(node: NodeSVFA): Unit = graph.add(node)
 
@@ -108,7 +108,7 @@ class GraphSFVA {
     val diSuccessors = graph.get(source).diSuccessors.map(ds => ds.outer)
     var finalPath: Set[List[NodeSVFA]] = Set()
 
-    if (source == sink || diSuccessors.size == 0) {
+    if (source == sink || diSuccessors.isEmpty) {
       finalPath = Set(currentPath.reverse)
     } else {
       val newVisited = source :: visited
@@ -146,7 +146,7 @@ class GraphSFVA {
 
     val pathBuilder = graph.newPathBuilder(graph.get(sourceNode))
     val paths = findPaths(sourceNode, sinkNode)
-    paths.filter(path => isPathValid(sourceNode, sinkNode, path)).size > 0
+    paths.exists(path => isPathValid(sourceNode, sinkNode, path))
   }
 
   def isPathValid(sourceNode: NodeSVFA, sinkNode: NodeSVFA, path: List[graph.EdgeT]): Boolean = {
