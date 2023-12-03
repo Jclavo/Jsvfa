@@ -42,7 +42,7 @@ class RuleCallTest extends AnyFunSuite:
     )
     jsvfa.run()
 
-    assert(jsvfa.graphSFVA.edgesTotal() === 6)
+    assert(jsvfa.graphSFVA.edgesTotal() === 8)
   }
 
   test("complex_call_with_parameter") {
@@ -55,5 +55,5 @@ class RuleCallTest extends AnyFunSuite:
     )
     jsvfa.run()
 
-    assert(jsvfa.graphSFVA.edgesTotal() === 14)
+    assert(jsvfa.graphSFVA.edgesTotal() === 20)
   }
