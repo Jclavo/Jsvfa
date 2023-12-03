@@ -20,7 +20,11 @@ import br.unb.cic.GraphSFVA
 
 import java.util.Collections
 
-abstract class JSVFA extends SVFABase with SourceAndSink {
+abstract class JSVFA extends SVFABase
+                      with SourceAndSink
+                      with Analysis
+                      with FieldSensitiveness
+                      with ObjectPropagation {
 
   var graphSFVA = new GraphSFVA()
 
