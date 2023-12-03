@@ -5,7 +5,6 @@ import sootup.java.core.JavaProject
 import sootup.java.core.language.JavaLanguage
 import sootup.java.core.views.JavaView
 import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
-import sootup.callgraph.ClassHierarchyAnalysisAlgorithm
 import sootup.core.graph.StmtGraph
 import sootup.core.jimple.basic.Local
 import sootup.core.jimple.common.expr.{AbstractInstanceInvokeExpr, AbstractInvokeExpr, Expr}
@@ -13,10 +12,11 @@ import sootup.core.jimple.common.stmt.{JAssignStmt, JIdentityStmt, JInvokeStmt, 
 import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
+import sootup.core.views.View
+
 import br.unb.cic.syntax.StmtSVFA.*
 import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
-import sootup.core.views.View
 
 import java.util.Collections
 
@@ -33,7 +33,7 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
       traverse(view, getEntryPoint(project, view))
   }
 
-  def traverse(view: View[?], method: SootMethod): Unit = {
+  private def traverse(view: View[?], method: SootMethod): Unit = {
     val body = method.getBody
     val stmtGraph = body.getStmtGraph()
     val methodName = method.getName
@@ -180,11 +180,11 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
     val callerStmt = invokeStmt
     val callerStmtGraph = callerMethod.getBody.getStmtGraph
 
-    (0 until (callerStmt.getInvokeExpr.getArgCount)).foreach(index => {
+    (0 until callerStmt.getInvokeExpr.getArgCount).foreach(index => {
       val parameterLocal = callerStmt.getInvokeExpr.getArg(index).asInstanceOf[Local]
       val parameterDeclarationStmt = getIdentityStatement(calleeMethod.getBody, calleeMethod.getBody.getParameterLocal(index))
 
-      if (! parameterDeclarationStmt.isDefined) {
+      if (parameterDeclarationStmt.isEmpty) {
         return
       }
 
@@ -302,11 +302,15 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
     returnStmts
   }
 
-  private def createNode(method: SootMethod, stmt: Stmt): NodeSVFA = isSourceStmt(stmt) match
-    case true => NodeSVFA.SourceNode(method, stmt)
-    case _ => isSinkStmt(stmt) match
-      case true => NodeSVFA.SinkNode(method, stmt)
-      case _ => NodeSVFA.SimpleNode(method, stmt)
+  private def createNode(method: SootMethod, stmt: Stmt): NodeSVFA = {
+    if (isSourceStmt(stmt)) {
+      return NodeSVFA.SourceNode(method, stmt)
+    }
+    if (isSinkStmt(stmt)) {
+      return NodeSVFA.SinkNode(method, stmt)
+    }
+    NodeSVFA.SimpleNode(method, stmt)
+  }
 }
 
 

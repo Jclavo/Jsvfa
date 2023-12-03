@@ -48,7 +48,7 @@ class GraphSFVA {
 
     val body = Doc.intercalate(Doc.text("\n"), edges union colorNodes)
 
-    // add prefix and sufix
+    // add prefix and suffix
     val prefix = Doc.text("digraph CFG { ")
     val suffix = Doc.text("}")
     val res = body.tightBracketBy(prefix, suffix)
