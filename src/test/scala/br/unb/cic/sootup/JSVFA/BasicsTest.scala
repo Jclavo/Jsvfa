@@ -123,3 +123,42 @@ class BasicsTest extends AnyFunSuite:
 //    println(jsvfa.graphSFVA.exportToDot())
     assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
   }
+
+  test("function_call_8") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall8",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 2)
+  }
+
+  test("function_call_9") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall9",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 0)
+  }
+
+  test("function_call_10") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.basic.FunctionCall10",
+      "main",
+      "void",
+      "src/test/java/samples/JSVFA/cases/basic"
+    )
+
+    jsvfa.run()
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 0)
+  }
