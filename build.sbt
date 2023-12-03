@@ -9,8 +9,10 @@ lazy val root = (project in file("."))
         libraryDependencies += "org.soot-oss" % "sootup.core" % "1.1.2",
         libraryDependencies += "org.soot-oss" % "sootup.java.core" % "1.1.2",
         libraryDependencies += "org.soot-oss" % "sootup.java.sourcecode" % "1.1.2",
-    //    libraryDependencies += "org.soot-oss" % "sootup.java.bytecode" % "1.1.2",
         libraryDependencies += "org.soot-oss" % "sootup.jimple.parser" % "1.1.2",
+
+//        libraryDependencies += "org.soot-oss" % "sootup.java.bytecode" % "1.1.2",
+
         libraryDependencies += "org.soot-oss" % "sootup.callgraph" % "1.1.2",
         libraryDependencies += "org.soot-oss" % "sootup.analysis" % "1.1.2",
 
