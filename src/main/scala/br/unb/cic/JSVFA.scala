@@ -77,14 +77,12 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
   }
 
   private def AnalyzerInvokes(view: View[?], invokeExp: AbstractInvokeExpr, invokeStmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
-    //    println(invokeStmt.stmt.getInvokeExpr.getMethodSignature.getDeclClassType)
 
     if (! view.getMethod(invokeExp.getMethodSignature).isPresent) {
       return
     }
 
     val calleeMethod = view.getMethod(invokeExp.getMethodSignature).get()
-    val calleeBody = calleeMethod.getBody
 
     /**
      * if it is source or sink stmt
@@ -146,15 +144,14 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
       val rValue = r.asInstanceOf[JReturnStmt].getOp
 
       // Case: 1
-      if (rValue.isInstanceOf[Local]) {
-        val opLocal = rValue.asInstanceOf[Local]
-
-        opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
-          val from = createNode(calleeMethod, d)
-          val to = createNode(calleeMethod, r)
-          graphSFVA.addEdge(from, to)
-        })
-      }
+      rValue match
+        case opLocal: Local =>
+          opLocal.getDefsForLocalUse(calleeMethod.getBody.getStmtGraph, r).forEach(d => {
+            val from = createNode(calleeMethod, d)
+            val to = createNode(calleeMethod, r)
+            graphSFVA.addEdge(from, to)
+          })
+        case _ =>
 
       /**
        * Case: 2
@@ -241,8 +238,8 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
    */
   private def ruleCopy(rightLocal: Local, assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
     rightLocal.getDefsForLocalUse(stmtGraph, assignmentStmt.stmt).forEach(d => {
-        val from = createNode(method, d)
-        val to = createNode(method, assignmentStmt.stmt)
+      val from = createNode(method, d)
+      val to = createNode(method, assignmentStmt.stmt)
       graphSFVA.addEdge(from, to)
     })
   }
@@ -255,12 +252,11 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
    *  - s: p = q        | - q@s'-> p@s
    */
   private def ruleCopyExpression(assignmentStmt: AssignmentStmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
-    assignmentStmt.stmt.getUses.forEach(u => {
-      if (u.isInstanceOf[Local]) {
-        val uLocal = u.asInstanceOf[Local]
-        ruleCopy(uLocal, assignmentStmt, method, stmtGraph)
-      }
-    })
+    assignmentStmt.stmt.getUses.forEach {
+      case use: Local =>
+        ruleCopy(use, assignmentStmt, method, stmtGraph)
+      case _ =>
+    }
   }
 
   /**
