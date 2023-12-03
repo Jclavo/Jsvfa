@@ -8,25 +8,25 @@ import sootup.core.jimple.common.stmt.{JAssignStmt, JInvokeStmt, Stmt}
 import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
 import sootup.java.core.JavaSootClass
 
-class JSVFATest(className: String, 
+class JSVFATest(className: String,
                 mainMethodName: String, 
-                mainMethodReturnType: String, 
-                pathTest: String) extends JSVFA {
+                mainMethodReturnType: String,
+                filePath: String) extends JSVFA {
 
   val sourceList: Set[String] = Set("source")
   val sinkList: Set[String] = Set("sink")
 
-  override def getClassName: String = className
+  override def getClassName(): String = className
 
-  override def getMainMethodName: String = mainMethodName
+  override def getMainMethodName(): String = mainMethodName
 
-  override def getMainMethodReturnType: String = mainMethodReturnType
+  override def getMainMethodReturnType(): String = mainMethodReturnType
 
-  override def getPathTest: String = pathTest
+  override def getFilePath(): String = filePath
 
-  override def getJavaVersionForAnalysis: Int = 8
+  override def getJavaVersion(): Int = 8
 
-  override def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass] = new JavaSourcePathAnalysisInputLocation(getPathTest)
+  override def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass] = new JavaSourcePathAnalysisInputLocation(filePath)
 
   override def isSourceStmt(stmt: Stmt): Boolean = {
     sourceList.find(_ == getMethodNameFromStmt(stmt)) match

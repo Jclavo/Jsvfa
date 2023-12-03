@@ -1,9 +1,6 @@
 package br.unb.cic.syntax
 
-import sootup.core.jimple.common.stmt.{Stmt}
-import sootup.core.model.Body
-
-import scala.collection.mutable
+import sootup.core.jimple.common.stmt.Stmt
 
 trait SourceAndSink {
 

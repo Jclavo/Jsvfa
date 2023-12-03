@@ -14,25 +14,25 @@ import java.util.Collections
 
 abstract class SVFABase {
     
-    def getClassName: String
+    def getClassName(): String
 
-    def getMainMethodName: String
+    def getMainMethodName(): String
 
-    def getMainMethodReturnType: String
+    def getMainMethodReturnType(): String
 
-    def getPathTest: String
+    def getFilePath(): String
 
-    def getJavaVersionForAnalysis: Int
+    def getJavaVersion(): Int
 
     def run(): Unit
 
     def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass]
     
     def createProject(): Project[?, ?] = {
-        val inputLocation = getPathAnalysisInputLocation()
+        val inputLocation = this.getPathAnalysisInputLocation()
 
         // Specify the language of the JavaProject.
-        val language = new JavaLanguage(getJavaVersionForAnalysis)
+        val language = new JavaLanguage(getJavaVersion())
 
         // Create a new JavaProject based on the input location
         JavaProject.builder(language).addInputLocation(inputLocation).build()
@@ -43,13 +43,13 @@ abstract class SVFABase {
     def getEntryPoint(project: Project[?, ?], view: View[?]): SootMethod = {
 
         // Create a signature for the class we want to analyze
-        val classType = project.getIdentifierFactory().getClassType(s"$getClassName")
+        val classType = project.getIdentifierFactory().getClassType(getClassName())
 
         // Create a signature for the method we want to analyze
         val methodSignature = project.getIdentifierFactory.getMethodSignature(
             classType,
-            getMainMethodName,
-            getMainMethodReturnType,
+            getMainMethodName(),
+            getMainMethodReturnType(),
             Collections.singletonList("java.lang.String[]") // TO-DO: I need to check if it needs to
         )
 
