@@ -10,8 +10,7 @@ class Path extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.paths.Path1",
       "main",
-      "void",
-      "src/test/java/samples/paths"
+      "void"
     )
 
     jsvfa.run()
@@ -33,8 +32,7 @@ class Path extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.paths.Path2",
       "main",
-      "void",
-      "src/test/java/samples/paths"
+      "void"
     )
 
     jsvfa.run()
@@ -54,8 +52,7 @@ class Path extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.paths.Path3",
       "main",
-      "void",
-      "src/test/java/samples/paths"
+      "void"
     )
 
     jsvfa.run()
@@ -74,8 +71,7 @@ class Path extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.paths.Path4",
       "main",
-      "void",
-      "src/test/java/samples/paths"
+      "void"
     )
 
     jsvfa.run()
@@ -95,8 +91,7 @@ class Path extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.paths.Path5",
       "main",
-      "void",
-      "src/test/java/samples/paths"
+      "void"
     )
 
     jsvfa.run()
@@ -116,8 +111,7 @@ class Path extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.paths.Path6",
       "main",
-      "void",
-      "src/test/java/samples/paths"
+      "void"
     )
 
     jsvfa.run()
@@ -137,8 +131,7 @@ class Path extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.paths.Path7",
       "main",
-      "void",
-      "src/test/java/samples/paths"
+      "void"
     )
 
     jsvfa.run()

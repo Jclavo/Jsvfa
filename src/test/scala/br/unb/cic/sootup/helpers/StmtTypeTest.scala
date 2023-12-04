@@ -10,8 +10,7 @@ class StmtTypeTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.SimpleLeak",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -24,8 +23,7 @@ class StmtTypeTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.SimpleLeak",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -38,8 +36,7 @@ class StmtTypeTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.rules.SimpleVariableAssignment",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/rules"
+      "void"
     )
 
     jsvfa.run()

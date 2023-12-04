@@ -10,8 +10,7 @@ class RuleCopyTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.rules.SimpleVariableAssignment",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/rules"
+      "void"
     )
 
     jsvfa.run()
@@ -24,8 +23,7 @@ class RuleCopyTest extends AnyFunSuite:
      val jsvfa = JSVFATest(
        "samples.JSVFA.rules.SimpleVariableAssignment",
        "main",
-       "void",
-       "src/test/java/samples/JSVFA/rules"
+       "void"
      )
      jsvfa.run()
 
@@ -36,8 +34,7 @@ class RuleCopyTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.rules.FullVariableAssignment",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/rules"
+      "void"
     )
     jsvfa.run()
 
@@ -48,8 +45,7 @@ class RuleCopyTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.basic.CalculatorSimple",
       "main",
-      "void",
-      "src/test/java/samples/basic"
+      "void"
     )
     jsvfa.run()
 
