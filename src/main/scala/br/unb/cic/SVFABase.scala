@@ -5,6 +5,7 @@ import sootup.core.Project
 import sootup.core.inputlocation.AnalysisInputLocation
 import sootup.core.model.SootMethod
 import sootup.core.signatures.MethodSignature
+import sootup.core.types.ClassType
 import sootup.core.views.View
 import sootup.java.core.{JavaProject, JavaSootClass}
 import sootup.java.core.language.JavaLanguage
@@ -44,12 +45,9 @@ abstract class SVFABase {
 
     def getEntryPoint(project: Project[?, ?], view: View[?]): SootMethod = {
 
-        // Create a signature for the class we want to analyze
-        val classType = project.getIdentifierFactory().getClassType(getClassName())
-
         // Create a signature for the method we want to analyze
         val methodSignature = project.getIdentifierFactory.getMethodSignature(
-            classType,
+            getClassType(project),
             getMainMethodName(),
             getMainMethodReturnType(),
             Collections.singletonList("java.lang.String[]") // TO-DO: I need to check if it needs to
@@ -58,5 +56,8 @@ abstract class SVFABase {
         getMethodByName(view, methodSignature)
     }
 
-    private def getMethodByName(view: View[?], methodSignature: MethodSignature): SootMethod = view.getMethod(methodSignature).get()
+    def getMethodByName(view: View[?], methodSignature: MethodSignature): SootMethod = view.getMethod(methodSignature).get()
+
+    // Create a signature for the class we want to analyze
+    def getClassType(project: Project[?, ?]): ClassType = project.getIdentifierFactory().getClassType(getClassName())
 }

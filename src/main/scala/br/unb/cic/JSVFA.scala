@@ -78,11 +78,17 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
 
   private def AnalyzerInvokes(view: View[?], invokeExp: AbstractInvokeExpr, invokeStmt: Stmt, method: SootMethod, stmtGraph: StmtGraph[?]): Unit = {
 
-    if (! view.getMethod(invokeExp.getMethodSignature).isPresent) {
+    // get method signature
+    val methodSignature = view.getProject.getIdentifierFactory.getMethodSignature(
+      getClassType(view.getProject),
+      invokeExp.getMethodSignature.getSubSignature
+    )
+
+    if (! view.getMethod(methodSignature).isPresent) {
       return
     }
 
-    val calleeMethod = view.getMethod(invokeExp.getMethodSignature).get()
+    val calleeMethod = view.getMethod(methodSignature).get()
 
     /**
      * if it is source or sink stmt
