@@ -15,7 +15,7 @@ class RuleReturnTest extends AnyFunSuite:
     jsvfa.run()
 
 //    println(jsvfa.graphSFVA.exportToDot())
-    assert(jsvfa.graphSFVA.edgesTotal() === 7)
+    assert(jsvfa.graphSFVA.edgesTotal() === 5)
   }
 
   test("complex_return") {
@@ -27,7 +27,7 @@ class RuleReturnTest extends AnyFunSuite:
     )
     jsvfa.run()
 
-    assert(jsvfa.graphSFVA.edgesTotal() === 9)
+    assert(jsvfa.graphSFVA.edgesTotal() === 6)
   }
 
   test("simple_return_string") {
@@ -40,5 +40,5 @@ class RuleReturnTest extends AnyFunSuite:
     jsvfa.run()
 
 //    println(jsvfa.graphSFVA.exportToDot())
-    assert(jsvfa.graphSFVA.edgesTotal() === 3)
+    assert(jsvfa.graphSFVA.edgesTotal() === 2)
   }

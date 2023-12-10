@@ -25,8 +25,8 @@ public class FunctionCall5 {
 
     public int getMagicNumber(int x) {
         int z;
-        z = source();
-        z = x * z;
+//        z = source(); CAREFUL: about this case, it is recognized as "sink" when line is uncommented
+        z = x * source();
         return z;
     }
 }

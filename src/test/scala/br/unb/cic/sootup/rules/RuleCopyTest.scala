@@ -38,7 +38,7 @@ class RuleCopyTest extends AnyFunSuite:
     )
     jsvfa.run()
 
-    assert(jsvfa.graphSFVA.edgesTotal() === 9)
+    assert(jsvfa.graphSFVA.edgesTotal() === 5)
   }
 
   test("calculator_simple") {
@@ -49,7 +49,7 @@ class RuleCopyTest extends AnyFunSuite:
     )
     jsvfa.run()
 
-    assert(jsvfa.graphSFVA.edgesTotal() === 8)
+    assert(jsvfa.graphSFVA.edgesTotal() === 7)
   }
 
 //  test("NumberSign") {

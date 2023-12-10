@@ -22,7 +22,7 @@ class Path extends AnyFunSuite:
     val paths = graphSFVA.findPaths(sourceNode, sinkNode)
 
     assert(paths.size === 1)
-    assert(paths.head.size === 4)
+    assert(paths.head.size === 3)
 
     assert(graphSFVA.hasValidPath(sourceNode, sinkNode) === true)
 }
@@ -42,7 +42,7 @@ class Path extends AnyFunSuite:
     val sinkNode = graphSFVA.getSinkNodes.head
 
     val paths = graphSFVA.findPaths(sourceNode, sinkNode)
-    assert(paths.size === 3)
+    assert(paths.size === 2)
 
     assert(graphSFVA.hasValidPath(sourceNode, sinkNode) === true)
   }

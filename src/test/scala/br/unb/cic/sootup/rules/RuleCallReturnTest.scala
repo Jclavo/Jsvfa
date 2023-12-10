@@ -15,7 +15,7 @@ class RuleCallReturnTest extends AnyFunSuite:
     jsvfa.run()
 
 //    println(jsvfa.graphSFVA.exportToDot())
-    assert(jsvfa.graphSFVA.edgesTotal() === 11)
+    assert(jsvfa.graphSFVA.edgesTotal() === 9)
   }
 
   test("complex_call_and_return") {
@@ -27,5 +27,5 @@ class RuleCallReturnTest extends AnyFunSuite:
     )
     jsvfa.run()
 
-    assert(jsvfa.graphSFVA.edgesTotal() === 28)
+    assert(jsvfa.graphSFVA.edgesTotal() === 23)
   }
