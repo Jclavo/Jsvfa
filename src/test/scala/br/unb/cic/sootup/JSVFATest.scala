@@ -6,6 +6,7 @@ import sootup.core.inputlocation.AnalysisInputLocation
 import sootup.core.jimple.common.expr.AbstractInvokeExpr
 import sootup.core.jimple.common.stmt.{JAssignStmt, JInvokeStmt, Stmt}
 import sootup.java.core.JavaSootClass
+import sootup.java.bytecode.inputlocation.JavaClassPathAnalysisInputLocation
 
 class JSVFATest(className: String,
                 mainMethodName: String, 
@@ -25,7 +26,7 @@ class JSVFATest(className: String,
 
   override def getJavaVersion(): Int = 8
 
-  override def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass] = new JavaClassPathAnalysisInputLocation(filePath)//new JavaSourcePathAnalysisInputLocation(filePath)
+  override def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass] = new JavaClassPathAnalysisInputLocation(filePath)
 
   override def isSourceStmt(stmt: Stmt): Boolean = {
     sourceList.find(_ == getMethodNameFromStmt(stmt)) match
