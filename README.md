@@ -29,3 +29,12 @@ José Clavo Tafur
 
 # Timeline
 The proposal dates to finish the project can be found at [Project's timeline](https://github.com/users/Jclavo/projects/1)
+
+# Dependencies
+
+### sootup.java.bytecode
+
+It needs **com.android.tools:r8:8.0.40** and at the time it is not available in the repository so it needs to be set up manually
+
+- Download **r8-8.0.40.pom** from [https://maven.google.com/web/index.html#com.android.tools:r8:8.0.40](https://maven.google.com/web/index.html#com.android.tools:r8:8.0.40)
+- Move file to **/.m2/repository/com/android/tools/r8/8.0.40/**
