@@ -16,7 +16,7 @@ class JSVFATest(className: String,
   val sourceList: Set[String] = Set("source")
   val sinkList: Set[String] = Set("sink")
 
-  override def getClassName(): String = className
+  override def getClassName(): String = className.split('.').reverse.head
 
   override def getMainMethodName(): String = mainMethodName
 
@@ -24,13 +24,13 @@ class JSVFATest(className: String,
 
   override def getFilePath(): String = rootFilePath + getPathFromClassName()
 
-  def rootFilePath: String = "src/test/java/" //target/scala-2.12/test-classes
+  def rootFilePath: String = "target/scala-3.3.1/test-classes/"
 
-  private def getPathFromClassName(): String = getClassName().split('.').reverse.tail.reverse.mkString(".").replace('.', '/')
+  private def getPathFromClassName(): String = className.split('.').reverse.tail.reverse.mkString(".").replace('.', '/')
 
   override def getJavaVersion(): Int = 8
 
-  override def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass] = new JavaClassPathAnalysisInputLocation(filePath)
+  override def getPathAnalysisInputLocation(): AnalysisInputLocation[JavaSootClass] = new JavaClassPathAnalysisInputLocation(getFilePath())
 
   override def isSourceStmt(stmt: Stmt): Boolean = {
     sourceList.find(_ == getMethodNameFromStmt(stmt)) match
