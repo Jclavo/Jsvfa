@@ -153,7 +153,7 @@ class GraphSFVA {
     var csList: List[GraphSFVA.this.graph.EdgeT] = List()
     var isValidPath: Boolean = true
 
-    if  (path.size <=1) {
+    if  (path.size == 0) {
       return false
     }
 
