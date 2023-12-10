@@ -12,8 +12,7 @@ class ToDot extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.simpleLeak",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
     jsvfa.run()
 

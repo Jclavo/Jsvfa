@@ -9,8 +9,7 @@ class RuleCopyPointersTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.rules.pointers.SimplePointerAssignment",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/rules/pointers"
+      "void"
     )
     jsvfa.run()
 //    println(jsvfa.graphSFVA.exportToDot())
@@ -21,8 +20,7 @@ class RuleCopyPointersTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.rules.pointers.ComplexPointerAssignment",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/rules/pointers"
+      "void"
     )
     jsvfa.run()
 

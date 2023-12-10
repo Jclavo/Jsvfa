@@ -1,7 +1,6 @@
 package br.unb.cic.sootup
 
 import br.unb.cic.JSVFA
-import br.unb.cic.syntax.StmtSVFA
 import sootup.core.inputlocation.AnalysisInputLocation
 import sootup.core.jimple.common.expr.AbstractInvokeExpr
 import sootup.core.jimple.common.stmt.{JAssignStmt, JInvokeStmt, Stmt}
@@ -10,8 +9,9 @@ import sootup.java.bytecode.inputlocation.JavaClassPathAnalysisInputLocation
 
 class JSVFATest(className: String,
                 mainMethodName: String, 
-                mainMethodReturnType: String,
-                filePath: String) extends JSVFA {
+                mainMethodReturnType: String
+               )
+                extends JSVFA {
 
   val sourceList: Set[String] = Set("source")
   val sinkList: Set[String] = Set("sink")
@@ -22,7 +22,11 @@ class JSVFATest(className: String,
 
   override def getMainMethodReturnType(): String = mainMethodReturnType
 
-  override def getFilePath(): String = filePath
+  override def getFilePath(): String = rootFilePath + getPathFromClassName()
+
+  def rootFilePath: String = "src/test/java/" //target/scala-2.12/test-classes
+
+  private def getPathFromClassName(): String = getClassName().split('.').reverse.tail.reverse.mkString(".").replace('.', '/')
 
   override def getJavaVersion(): Int = 8
 

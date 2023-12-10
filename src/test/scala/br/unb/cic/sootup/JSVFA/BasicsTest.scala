@@ -11,7 +11,6 @@ class BasicsTest extends AnyFunSuite:
       "SimpleLeak",
       "main",
       "void",
-      "target/scala-3.3.1/test-classes/samples/JSVFA/cases/basic"
     )
 
     jsvfa.run()
@@ -25,8 +24,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.ComplexLeak",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -38,8 +36,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall1",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -51,8 +48,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall2",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -64,8 +60,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall3",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -77,8 +72,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall4",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -90,8 +84,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall5",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -103,8 +96,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall6",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -116,8 +108,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall7",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -130,8 +121,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall8",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -143,8 +133,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall9",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()
@@ -156,8 +145,7 @@ class BasicsTest extends AnyFunSuite:
     val jsvfa = JSVFATest(
       "samples.JSVFA.cases.basic.FunctionCall10",
       "main",
-      "void",
-      "src/test/java/samples/JSVFA/cases/basic"
+      "void"
     )
 
     jsvfa.run()

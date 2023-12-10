@@ -20,6 +20,8 @@ abstract class SVFABase {
 
     def getMainMethodReturnType(): String
 
+    def rootFilePath: String
+
     def getFilePath(): String
 
     def getJavaVersion(): Int
