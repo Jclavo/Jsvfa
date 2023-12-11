@@ -17,6 +17,7 @@ import br.unb.cic.syntax.StmtSVFA.*
 import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
 import sootup.callgraph.{CallGraph, ClassHierarchyAnalysisAlgorithm, RapidTypeAnalysisAlgorithm}
+import sootup.core.typehierarchy.ViewTypeHierarchy
 
 import java.util.Collections
 
@@ -40,11 +41,13 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
 
   private def generateCallGraphCHA(view: View[?], method: SootMethod): CallGraph = {
 
+//    val typeHierarchy = new ViewTypeHierarchy(view);
     val cha = new ClassHierarchyAnalysisAlgorithm(view); // this is working but failing when native calls are performed
 
     val callGraph = cha.initialize(Collections.singletonList(method.getSignature));
 
-    println(callGraph)
+//    println(callGraph)
+    callGraph.callsFrom(method.getSignature).forEach(println(_));
 
     callGraph
     //    if (callGraph.callCount() > 0) {
