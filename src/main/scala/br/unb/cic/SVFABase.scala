@@ -52,7 +52,7 @@ abstract class SVFABase {
             classType,
             getMainMethodName(),
             getMainMethodReturnType(),
-            Collections.singletonList("java.lang.String[]") // TO-DO: I need to check if it needs to
+            Collections.singletonList("java.lang.String[]") // TO-DO: I need to check if it needs to // Collections.emptyList()
         )
 
         getMethodByName(view, methodSignature)
