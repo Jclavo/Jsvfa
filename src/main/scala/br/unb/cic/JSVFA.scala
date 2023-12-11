@@ -13,10 +13,10 @@ import sootup.core.model.{SootClass, SootMethod}
 import sootup.core.signatures.MethodSignature
 import sootup.core.model.Body
 import sootup.core.views.View
-
 import br.unb.cic.syntax.StmtSVFA.*
 import br.unb.cic.syntax.{NodeSVFA, SourceAndSink, StmtSVFA}
 import br.unb.cic.GraphSFVA
+import sootup.callgraph.{CallGraph, ClassHierarchyAnalysisAlgorithm, RapidTypeAnalysisAlgorithm}
 
 import java.util.Collections
 
@@ -27,10 +27,31 @@ abstract class JSVFA extends SVFABase with SourceAndSink {
   private var methodsVisited: Set[String] = Set()
 
   override def run(): Unit = {
-      val project = createProject()
-      val view = createView(project)
+    val project = createProject()
 
-      traverse(view, getEntryPoint(project, view))
+    val view = createView(project)
+
+    val entryPoint = getEntryPoint(project, view)
+
+    val cgCHA = generateCallGraphCHA(view, entryPoint)
+
+    traverse(view, entryPoint)
+  }
+
+  private def generateCallGraphCHA(view: View[?], method: SootMethod): CallGraph = {
+
+    val cha = new ClassHierarchyAnalysisAlgorithm(view); // this is working but failing when native calls are performed
+
+    val callGraph = cha.initialize(Collections.singletonList(method.getSignature));
+
+    println(callGraph)
+
+    callGraph
+    //    if (callGraph.callCount() > 0) {
+    ////      println(callGraph)
+    ////      val spark = new Spark.Builder(view, callGraph).vta(true).build();
+    ////      spark.analyze();
+    //    }
   }
 
   private def traverse(view: View[?], method: SootMethod): Unit = {
