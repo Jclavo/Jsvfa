@@ -10,13 +10,15 @@ public class CallGraph1 {
         b = 2;
 
         resulTemp = sum(a, b);
+
+        result = absolute(resulTemp);
     }
 
     public int sum(int x, int y)
     {
         int result;
 
-        result = absolute(x) + y;
+        result = absolute(x) + absolute(y);
 
         return result;
     }
