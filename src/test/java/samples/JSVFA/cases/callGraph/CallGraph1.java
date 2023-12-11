@@ -12,6 +12,8 @@ public class CallGraph1 {
         resulTemp = sum(a, b);
 
         result = absolute(resulTemp);
+
+        show(result);
     }
 
     public int sum(int x, int y)
@@ -30,5 +32,10 @@ public class CallGraph1 {
         b = a * -1;
 
         return b;
+    }
+
+    public void show(int v)
+    {
+        System.out.println(v);
     }
 }

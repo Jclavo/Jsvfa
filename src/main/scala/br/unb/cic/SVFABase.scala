@@ -9,8 +9,8 @@ import sootup.core.views.View
 import sootup.java.core.{JavaProject, JavaSootClass}
 import sootup.java.core.language.JavaLanguage
 import sootup.java.sourcecode.inputlocation.JavaSourcePathAnalysisInputLocation
-
 import java.util.Collections
+//import sootup.java.bytecode.inputlocation.JavaClassPathAnalysisInputLocation
 
 abstract class SVFABase {
     
@@ -37,7 +37,12 @@ abstract class SVFABase {
         val language = new JavaLanguage(getJavaVersion())
 
         // Create a new JavaProject based on the input location
-        JavaProject.builder(language).addInputLocation(inputLocation).build()
+        JavaProject.builder(language)
+          .addInputLocation(inputLocation)
+//          .addInputLocation(
+//              new JavaClassPathAnalysisInputLocation(
+//                  System.getProperty("java.home") + "/lib/rt.jar"))
+          .build()
     }
 
     def createView(project: Project[?, ?]): View[?] = project.createView()
