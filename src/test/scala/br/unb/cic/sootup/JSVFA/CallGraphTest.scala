@@ -17,3 +17,16 @@ class CallGraphTest extends AnyFunSuite:
 
     assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
   }
+
+  test("call_graph_2") {
+
+    val jsvfa = JSVFATest(
+      "samples.JSVFA.cases.callGraph.CallGraph2",
+      "main",
+      "void"
+    )
+
+    jsvfa.run()
+
+    assert(jsvfa.graphSFVA.getAmountOfLeaks === 1)
+  }
